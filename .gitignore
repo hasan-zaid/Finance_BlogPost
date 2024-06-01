@@ -3,3 +3,8 @@
 ################################################################################
 
 /.vs/Finance_BlogPost
+/Finance_BlogPost/obj/Debug/net8.0/Finance_BlogPost.AssemblyInfo.cs
+/Finance_BlogPost/obj/Debug/net8.0/Finance_BlogPost.AssemblyInfoInputs.cache
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
+/Finance_BlogPost/obj/Release/net8.0

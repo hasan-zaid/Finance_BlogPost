@@ -1,4 +1,5 @@
 using Finance_BlogPost.Data;
+using Finance_BlogPost.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +11,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<FinanceBlogDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 	.AddEntityFrameworkStores<FinanceBlogDbContext>();
+
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 var app = builder.Build();
 

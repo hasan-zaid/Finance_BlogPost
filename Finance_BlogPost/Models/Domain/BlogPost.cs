@@ -1,4 +1,8 @@
-﻿namespace Finance_BlogPost.Models.Domain
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Finance_BlogPost.Models.Domain
 {
     public class BlogPost
     {
@@ -10,8 +14,12 @@
         public string BlogImageUrl { get; set; }
         public string UrlHandle { get; set; }
         public DateTime PublishedDate { get; set; }
-        public string Author { get; set; }
-        public Guid AuthorId { get; set; }
+     
+        public string AuthorId { get; set; }
+
+        [ForeignKey("AuthorId")]
+        [ValidateNever]
+        public IdentityUser  Author { get; set; }
         public bool Visible { get; set; }
         public string Approval { get; set; }
 

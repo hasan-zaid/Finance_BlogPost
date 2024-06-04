@@ -76,7 +76,7 @@ namespace Finance_BlogPost.Data
 			builder.Entity<IdentityUser>().HasData(adminUser);
 
 
-			// Add All roles to SuperAdminUser
+			// Add admin role to admin
 			var adminRoles = new List<IdentityUserRole<string>>
 			{
 				new IdentityUserRole<string>
@@ -86,8 +86,42 @@ namespace Finance_BlogPost.Data
 				}
 			};
 
+
+
 			builder.Entity<IdentityUserRole<string>>().HasData(adminRoles);
 
-		}
+
+            //Seed Author
+
+            var authorId = "7d9cfb34-fa14-42f6-b39f-0064019a10ec";
+            var author = new IdentityUser
+            {
+                UserName = "author@finblog.com",
+                Email = "author@finblog.com",
+                NormalizedEmail = "author@finblog.com".ToUpper(),
+                NormalizedUserName = "author@finblog.com".ToUpper(),
+                Id = authorId
+            };
+
+            author.PasswordHash = new PasswordHasher<IdentityUser>()
+                .HashPassword(author, "author@123");
+
+
+            builder.Entity<IdentityUser>().HasData(author);
+
+
+            // Add role to Author
+            var authorRoles = new List<IdentityUserRole<string>>
+            {
+                new IdentityUserRole<string>
+                {
+                    RoleId = authorRoleId,
+                    UserId = authorId
+                }
+            };
+
+            builder.Entity<IdentityUserRole<string>>().HasData(authorRoles);
+
+        }
 	}
 }

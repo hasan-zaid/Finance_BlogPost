@@ -15,6 +15,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 	.AddEntityFrameworkStores<FinanceBlogDbContext>();
 
 builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 
 var app = builder.Build();
 

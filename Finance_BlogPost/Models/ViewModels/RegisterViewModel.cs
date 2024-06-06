@@ -12,6 +12,7 @@ namespace Finance_BlogPost.Models.ViewModels
 		public string Email { get; set; }
 
 		[Required]
-		public string Password { get; set; }
+        [MinLength(8, ErrorMessage = "Password has to be at least 8 characters")]
+        public string Password { get; set; }
 	}
 }

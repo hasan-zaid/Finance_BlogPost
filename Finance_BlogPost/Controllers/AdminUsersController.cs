@@ -99,48 +99,53 @@ namespace Finance_BlogPost.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddUserRequest addUserRequest)
         {
-
-            var identityUser = new IdentityUser
+            if (ModelState.IsValid)
             {
-                UserName = addUserRequest.Username,
-                Email = addUserRequest.Email
-            };
 
-
-            var identityResult =
-                await userManager.CreateAsync(identityUser, addUserRequest.Password);
-
-            if (identityResult is not null)
-            {
-                if (identityResult.Succeeded)
+                var identityUser = new IdentityUser
                 {
-                    // assign roles to this user
-                    var roles = new List<string>();
+                    UserName = addUserRequest.Username,
+                    Email = addUserRequest.Email
+                };
 
-                    if (addUserRequest.AdminRoleCheckbox)
-                    {
-                        roles.Add("Admin");
-                    }
-                    if (addUserRequest.AuthorRoleCheckbox)
-                    {
-                        roles.Add("Author");
-                    }
-                    if (addUserRequest.UserRoleCheckbox)
-                    {
-                        roles.Add("User");
-                    }
 
-                    identityResult =
-                        await userManager.AddToRolesAsync(identityUser, roles);
+                var identityResult =
+                    await userManager.CreateAsync(identityUser, addUserRequest.Password);
 
-                    if (identityResult is not null && identityResult.Succeeded)
+                if (identityResult is not null)
+                {
+                    if (identityResult.Succeeded)
                     {
-                        TempData["success"] = "User has been added successfully";
-                        return RedirectToAction("List", "AdminUsers");
-                    }
+                        // assign roles to this user
+                        var roles = new List<string>();
 
+                        if (addUserRequest.AdminRoleCheckbox)
+                        {
+                            roles.Add("Admin");
+                        }
+                        if (addUserRequest.AuthorRoleCheckbox)
+                        {
+                            roles.Add("Author");
+                        }
+                        if (addUserRequest.UserRoleCheckbox)
+                        {
+                            roles.Add("User");
+                        }
+
+                        identityResult =
+                            await userManager.AddToRolesAsync(identityUser, roles);
+
+                        if (identityResult is not null && identityResult.Succeeded)
+                        {
+                            TempData["success"] = "User has been added successfully";
+                            return RedirectToAction("List", "AdminUsers");
+                        }
+
+                    }
                 }
+
             }
+
             TempData["error"] = "Failed to add user";
             return View();
         }

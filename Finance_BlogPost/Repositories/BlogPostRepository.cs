@@ -93,8 +93,6 @@ namespace Finance_BlogPost.Repositories
                 existingBlog.PageTitle = blogPost.PageTitle;
                 existingBlog.Content = blogPost.Content;
                 existingBlog.ShortDescription = blogPost.ShortDescription;
-                existingBlog.AuthorId = blogPost.Author.Id;
-                existingBlog.Author = blogPost.Author;
                 existingBlog.BlogImageUrl = blogPost.BlogImageUrl;
                 existingBlog.UrlHandle = blogPost.UrlHandle;
                 existingBlog.Visible = blogPost.Visible;

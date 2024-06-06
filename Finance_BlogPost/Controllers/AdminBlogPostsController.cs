@@ -137,7 +137,6 @@ namespace Finance_BlogPost.Controllers
                     Heading = blogPost.Heading,
                     PageTitle = blogPost.PageTitle,
                     Content = blogPost.Content,
-                    Author = blogPost.Author,
                     BlogImageUrl = blogPost.BlogImageUrl,
                     UrlHandle = blogPost.UrlHandle,
                     ShortDescription = blogPost.ShortDescription,
@@ -228,13 +227,14 @@ namespace Finance_BlogPost.Controllers
             {
                 // Show success notification
                 TempData["success"] = "Blog Post has been deleted successfully";
-                return Json(new { success = false, message = "Error while deleting" });
+                return Json(new { success = true, message = "Deleted Successfully" });
+              
             }
 
             // Show an error notification
             TempData["error"] = "Failed to delete the blog post.";
 
-            return Json(new { success = true, message = "Deleted Successfully" });
+            return Json(new { success = false, message = "Error while deleting" });
         }
         #endregion
     }

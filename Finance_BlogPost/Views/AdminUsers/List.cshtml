@@ -1,0 +1,188 @@
+﻿@model List<Finance_BlogPost.Models.ViewModels.UserViewModel>
+@{
+    int nextPage = Convert.ToInt32(ViewBag.PageNumber) + 1;
+    int prevPage = Convert.ToInt32(ViewBag.PageNumber) - 1;
+}
+<div class="bg-secondary bg-opacity-10 py-2">
+    <div class="container">
+        <h1>Users</h1>
+    </div>
+</div>
+
+
+<form method="get"
+      asp-controller="AdminUsers" ,
+      asp-action="List">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col col-md-3 d-flex">
+                <input type="text" class="form-control"
+                       name="searchQuery" value="@ViewBag.SearchQuery" />
+                <button type="submit" class="btn btn-warning ms-3">Search</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<div>
+    <div class="container py-5">
+
+        <div class="mb-3 d-flex justify-content-end">
+            <a class="btn btn-dark" asp-controller="AdminUsers" asp-action="Add">
+                Add User
+            </a>
+        </div>
+
+
+        @if (Model != null && Model.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>
+                            Username
+                            <span>
+                                <span>
+                                    <a class="btn btn-light"
+                                       asp-controller="AdminUsers"
+                                       asp-action="List"
+                                       asp-route-sortBy="UserName"
+                                       asp-route-sortDirection="Asc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-up"></i>
+                                    </a>
+                                </span>
+                                <span>
+                                    <a class="btn btn-light"
+                                       asp-controller="AdminUsers"
+                                       asp-action="List"
+                                       asp-route-sortBy="UserName"
+                                       asp-route-sortDirection="Desc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </a>
+                                </span>
+                            </span>
+
+
+                        </th>
+                        <th>
+                            Email
+                            <span>
+                                <span>
+                                    <a class="btn btn-light"
+                                       asp-controller="AdminUsers"
+                                       asp-action="List"
+                                       asp-route-sortBy="Email"
+                                       asp-route-sortDirection="Asc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-up"></i>
+                                    </a>
+                                </span>
+                                <span>
+                                    <a class="btn btn-light"
+                                       asp-controller="AdminUsers"
+                                       asp-action="List"
+                                       asp-route-sortBy="Email"
+                                       asp-route-sortDirection="Desc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </a>
+                                </span>
+                            </span>
+                            
+                        </th>
+                        <th>
+                            Roles
+                        </th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.Id</td>
+                            <td>@user.Username</td>
+                            <td>@user.Email</td>
+                            <td>
+                                <div class="d-flex">
+                                    @foreach (var role in user.Roles)
+                                    {
+                                        <span class="badge bg-secondary me-1">@role.Name</span>
+                                    }
+                                </div>
+                            </td>
+
+                            <td>
+                                <a onClick=Delete("delete/@user.Id") class="btn btn-danger mx-2">
+                                    <i class="bi bi-trash-fill"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link"
+                           asp-controller="AdminUsers"
+                           asp-action="List"
+                           asp-route-pageNumber="@prevPage"
+                           asp-route-pageSize="@ViewBag.PageSize"
+                           asp-route-sortBy="@ViewBag.SortBy"
+                           asp-route-sortDirection="@ViewBag.SortDirection">
+                            Previous
+                        </a>
+                    </li>
+
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item">
+                            <a class="page-link"
+                               asp-controller="AdminUsers"
+                               asp-action="List"
+                               asp-route-pageNumber="@i"
+                               asp-route-pageSize="@ViewBag.PageSize"
+                               asp-route-sortBy="@ViewBag.SortBy"
+                               asp-route-sortDirection="@ViewBag.SortDirection">
+                                @i
+                            </a>
+                        </li>
+                    }
+
+
+                    <li class="page-item">
+                        <a class="page-link"
+                           asp-controller="AdminUsers"
+                           asp-action="List"
+                           asp-route-pageNumber="@nextPage"
+                           asp-route-pageSize="@ViewBag.PageSize"
+                           asp-route-sortBy="@ViewBag.SortBy"
+                           asp-route-sortDirection="@ViewBag.SortDirection">
+                            Next
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        }
+        else
+        {
+            <p>No users found!</p>
+        }
+
+
+
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        <partial name="_DeleteConfirmation" />
+    }
+}

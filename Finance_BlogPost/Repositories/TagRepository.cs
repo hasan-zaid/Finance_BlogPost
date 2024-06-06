@@ -72,8 +72,6 @@ namespace Finance_BlogPost.Repositories
             query = query.Skip(skipResults).Take(pageSize);
 
             return await query.ToListAsync();
-
-            // return await bloggieDbContext.Tags.ToListAsync();
         }
 
         public Task<Tag?> GetAsync(Guid id)

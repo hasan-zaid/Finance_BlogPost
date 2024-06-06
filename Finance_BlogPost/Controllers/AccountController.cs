@@ -45,12 +45,15 @@ namespace Finance_BlogPost.Controllers
 					if (roleIdentityResult.Succeeded)
 					{
 						// Show success notification
+						TempData["success"] = "Successful Registration";
 						return RedirectToAction("Login");
 					}
 				}
 			}
 
 			// Show error notification
+
+			TempData["error"] = "Unsuccessfuly Registration";
 			return View();
 		}
 

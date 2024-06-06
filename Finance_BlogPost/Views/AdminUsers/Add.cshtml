@@ -1,0 +1,59 @@
+﻿@model Finance_BlogPost.Models.ViewModels.AddUserRequest
+@{
+}
+
+<div class="bg-secondary bg-opacity-10 py-2">
+    <div class="container">
+        <h1>Add New User</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    <form method="post">
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-control" id="name" asp-for="Username" required />
+            <span class="text-danger" asp-validation-for="Username"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="text" class="form-control" id="displayName" asp-for="Email" required />
+            <span class="text-danger" asp-validation-for="Email"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" asp-for="Password" />
+            <span class="text-danger" asp-validation-for="Password"></span>
+        </div>
+        <div class="mb-3">
+            <fieldset class="form-group">
+
+                <legend class="form-label"> Select a user role </legend>
+                <div class="form-check">
+                    <input type="checkbox" id="chkAdminRole" class="form-check-input"
+                           asp-for="AdminRoleCheckbox" />
+                    <label class="form-check-label" for="chkAdminRole">Admin</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" id="chkAuthorRole" class="form-check-input"
+                           asp-for="AuthorRoleCheckbox" />
+                    <label class="form-check-label" for="chkAuthorRole">Author</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" id="chkUserRole" class="form-check-input"
+                           asp-for="UserRoleCheckbox" />
+                    <label class="form-check-label" for="chkUserRole">Normal User</label>
+                </div>
+            </fieldset>
+
+  
+            
+
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-dark">Submit</button>
+        </div>
+    </form>
+</div>

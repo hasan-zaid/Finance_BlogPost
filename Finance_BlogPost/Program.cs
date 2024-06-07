@@ -28,6 +28,7 @@ builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBlogPostRejectionRepository, BlogPostRejectionRepository>();
+builder.Services.AddScoped<IUserProfileImageRepository, UserProfileImageRepository>();
 
 var app = builder.Build();
 

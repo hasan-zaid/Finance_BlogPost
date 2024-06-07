@@ -1,6 +1,7 @@
 ﻿using Finance_BlogPost.Data;
 using Finance_BlogPost.Models.Domain;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace Finance_BlogPost.Repositories
 {
@@ -110,6 +111,51 @@ namespace Finance_BlogPost.Repositories
         public async Task<int> CountAsync()
         {
             return await dbContext.BlogPosts.CountAsync();
+        }
+
+
+        public async Task<IEnumerable<BlogPost>> GetPendingApprovalAsync(string? searchQuery,
+                  string? sortBy,
+                  string? sortDirection,
+                  int pageNumber = 1,
+                  int pageSize = 100)
+        {
+
+            var query = dbContext.BlogPosts
+                              .Include(x => x.Author)
+                              .Include(x => x.Tags) 
+                               .Where(x => x.Approval == "Pending")
+                              .AsQueryable();
+
+            // Filtering
+            if (string.IsNullOrWhiteSpace(searchQuery) == false)
+            {
+                query = query.Where(x => x.Heading.Contains(searchQuery) ||
+                                         x.Author.UserName.Contains(searchQuery));
+            }
+
+            // Sorting
+            if (string.IsNullOrWhiteSpace(sortBy) == false)
+            {
+                var isDesc = string.Equals(sortDirection, "Desc", StringComparison.OrdinalIgnoreCase);
+
+                if (string.Equals(sortBy, "Heading", StringComparison.OrdinalIgnoreCase))
+                {
+                    query = isDesc ? query.OrderByDescending(x => x.Heading) : query.OrderBy(x => x.Heading);
+                }
+
+                if (string.Equals(sortBy, "Author", StringComparison.OrdinalIgnoreCase))
+                {
+                    query = isDesc ? query.OrderByDescending(x => x.Author.UserName) : query.OrderBy(x => x.Author.UserName);
+                }
+            }
+
+            // Pagination
+            var skipResults = (pageNumber - 1) * pageSize;
+            query = query.Skip(skipResults).Take(pageSize);
+
+            return await query.ToListAsync();
+    
         }
     }
 }

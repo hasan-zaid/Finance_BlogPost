@@ -19,5 +19,11 @@ namespace Finance_BlogPost.Repositories
         Task<BlogPost?> DeleteAsync(Guid id);
 
         Task<int> CountAsync();
+
+        Task<IEnumerable<BlogPost>> GetPendingApprovalAsync(string? searchQuery,
+                  string? sortBy,
+                  string? sortDirection,
+                  int pageNumber = 1,
+                  int pageSize = 100);
     }
 }

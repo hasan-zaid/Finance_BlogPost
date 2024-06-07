@@ -1,0 +1,137 @@
+﻿@model Finance_BlogPost.Models.ViewModels.UserViewProfile
+
+
+<div class="row mt-5">
+    <div class="col col-md-6 offset-md-3">
+        <div class="profile-container">
+            <h1 class="mb-4">Profile</h1>
+            <div class="profile-image position-relative rounded-circle mb-3">
+                <img src="" alt="Profile Image" id="profileImgTag" asp-for="ProfileImageUrl">
+                <div class="overlay">
+                    <label for="fileInput" class="m-0 icon upload">
+                        <i class="bi bi-camera-fill"></i>
+                    </label>
+                    <i class="bi bi-trash-fill icon delete" id="deleteIcon" onclick="confirmRemoveImage()"></i>
+                </div>
+                <input type="file" id="fileInput" class="file-input">
+            </div>
+
+            <form id="profileForm" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" asp-for="Username" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" asp-for="Email" disabled>
+                </div>
+                <input type="text" class="form-control" id="profileImageUrl" asp-for="ProfileImageUrl" hidden/>
+
+                <button type="button" class="btn btn-primary" id="editButton" onclick="editProfile()">Edit</button>
+                <button type="submit" class="btn btn-success" id="saveButton" style="display: none;">Save</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+
+
+        const profileImageUploadElement = document.getElementById('fileInput');
+        const profileImgTag = document.getElementById('profileImgTag');
+        const profileImgUrl = document.getElementById('profileImageUrl');
+        const profileImageDiv = document.querySelector('.profile-image');
+        const uploadIcon = document.querySelector('.icon.upload');
+        const deleteIcon = document.querySelector('.icon.delete');
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            if (profileImgUrl && (profileImgUrl.value != null && profileImgUrl.value !== "")) {
+                profileImgTag.src = profileImgUrl.value;
+                profileImgTag.style.display = 'block';
+                profileImgTag.classList.add('uploaded');
+                profileImageDiv.style.background = 'none';
+                uploadIcon.style.display = 'none';
+                deleteIcon.style.display = 'block';
+            }
+        });
+
+        async function uploadProfileImage(e) {
+            console.log(e.target.files[0]);
+
+            let data = new FormData();
+            data.append('file', e.target.files[0]);
+
+            await fetch('/api/media', {
+                method: 'POST',
+                headers: {
+                    'Aceept': '*/*',
+                },
+                body: data
+            }).then(response => response.json())
+                .then(result => {
+                    profileImgTag.src = result.link;
+                    profileImgUrl.value = result.link;
+                    profileImgTag.style.display = 'block';
+                    profileImgTag.classList.add('uploaded');
+                    profileImageDiv.style.background = 'none';
+                    uploadIcon.style.display = 'none';
+                    deleteIcon.style.display = 'block';
+                    editProfile();
+                });
+        }
+
+
+        profileImageUploadElement.addEventListener('change', uploadProfileImage);
+
+
+        function confirmRemoveImage() {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you really want to remove this image?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, keep it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    removeImage();
+                }
+            });
+        }
+
+        function removeImage() {
+            const profileImgTag = document.getElementById('profileImgTag');
+            const profileImageDiv = document.querySelector('.profile-image');
+            const uploadIcon = document.querySelector('.icon.upload');
+            const deleteIcon = document.querySelector('.icon.delete');
+            profileImgTag.src = '';
+            profileImgTag.style.display = 'none';
+            profileImgTag.classList.remove('uploaded');
+            profileImageDiv.style.background =
+                'linear-gradient(45deg, #999 25%, transparent 25%) -50px 0,' +
+                'linear-gradient(45deg, transparent 75%, #999 75%) -50px 0,' +
+                'linear-gradient(45deg, transparent 75%, #999 75%),' +
+                'linear-gradient(45deg, #999 25%, transparent 25%)';
+            profileImageDiv.style.backgroundSize = '20px 20px';
+            uploadIcon.style.display = 'block';
+            deleteIcon.style.display = 'none';
+            profileImgUrl.value = "";
+            editProfile();
+        }
+
+        function editProfile() {
+            document.getElementById('username').disabled = false;
+            document.getElementById('email').disabled = false;
+            document.getElementById('editButton').style.display = 'none';
+            document.getElementById('saveButton').style.display = 'inline-block';
+        }
+
+
+
+    </script>
+
+}

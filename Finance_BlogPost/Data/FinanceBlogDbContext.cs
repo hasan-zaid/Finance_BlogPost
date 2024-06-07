@@ -19,8 +19,9 @@ namespace Finance_BlogPost.Data
 		public DbSet<BlogLike> Likes { get; set; }
 
 		public DbSet<BlogPostRejection> BlogPostRejections { get; set; }
+        public DbSet<UserProfileImage> UserProfileImages { get; set; }
 
-		protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);
 

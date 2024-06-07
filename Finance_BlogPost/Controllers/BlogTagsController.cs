@@ -1,4 +1,6 @@
-﻿using Finance_BlogPost.Models.Domain;
+﻿using Amazon.Runtime.Internal;
+using Azure.Core;
+using Finance_BlogPost.Models.Domain;
 using Finance_BlogPost.Models.ViewModels;
 using Finance_BlogPost.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +28,15 @@ namespace Finance_BlogPost.Controllers
         [ActionName("Add")]
         public async Task<IActionResult> Add(AddTagRequest addTagRequest)
         {
-            ValidateAddTagRequest(addTagRequest);
+            //Custom Validation
+
+            if (addTagRequest.Name is not null && addTagRequest.DisplayName is not null)
+            {
+                if (addTagRequest.Name == addTagRequest.DisplayName)
+                {
+                    ModelState.AddModelError("DisplayName", "Name cannot be the same as DisplayName");
+                }
+            }
 
             if (ModelState.IsValid == false)
             {
@@ -105,6 +115,20 @@ namespace Finance_BlogPost.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditTagRequest editTagRequest)
         {
+            //Custom Validation
+            if (editTagRequest.Name is not null && editTagRequest.DisplayName is not null)
+            {
+                if (editTagRequest.Name == editTagRequest.DisplayName)
+                {
+                    ModelState.AddModelError("DisplayName", "Name cannot be the same as DisplayName");
+                }
+            }
+            if (ModelState.IsValid == false)
+            {
+                return View(editTagRequest);
+            }
+
+
             var tag = new Tag
             {
                 Id = editTagRequest.Id,
@@ -130,16 +154,6 @@ namespace Finance_BlogPost.Controllers
 
 
 
-        private void ValidateAddTagRequest(AddTagRequest request)
-        {
-            if (request.Name is not null && request.DisplayName is not null)
-            {
-                if (request.Name == request.DisplayName)
-                {
-                    ModelState.AddModelError("DisplayName", "Name cannot be the same as DisplayName");
-                }
-            }
-        }
 
 
         #region API Calls

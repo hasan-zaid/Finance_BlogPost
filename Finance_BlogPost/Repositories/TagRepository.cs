@@ -41,7 +41,9 @@ namespace Finance_BlogPost.Repositories
                   int pageNumber = 1,
                   int pageSize = 100)
         {
-            var query = dbContext.Tags.AsQueryable();
+            var query = dbContext.Tags
+                     .Include(x => x.BlogPosts)
+                     .AsQueryable();
 
             // Filtering
             if (string.IsNullOrWhiteSpace(searchQuery) == false)

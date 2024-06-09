@@ -113,6 +113,14 @@ namespace Finance_BlogPost.Repositories
             return await dbContext.BlogPosts.CountAsync();
         }
 
+        public async Task<int> CountByStatusAsync(string status)
+        {
+            return await dbContext.BlogPosts
+                                  .Where(bp => bp.Approval == status)
+                                  .CountAsync();
+        }
+
+
 
         public async Task<IEnumerable<BlogPost>> GetPendingApprovalAsync(string? searchQuery,
                   string? sortBy,

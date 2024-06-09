@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Finance_BlogPost.Models.Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Finance_BlogPost.Repositories
 {
@@ -10,6 +11,7 @@ namespace Finance_BlogPost.Repositories
         int pageNumber = 1,
         int pageSize = 100);
 
+        Task<IdentityUser?> GetAsync(string id);
         Task<int> CountAsync();
     }
 }

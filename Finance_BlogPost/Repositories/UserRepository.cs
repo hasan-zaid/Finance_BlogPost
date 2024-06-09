@@ -1,4 +1,5 @@
 ﻿using Finance_BlogPost.Data;
+using Finance_BlogPost.Models.Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
@@ -55,6 +56,14 @@ namespace Finance_BlogPost.Repositories
 
             return await query.ToListAsync();
         }
+
+        public async Task<IdentityUser?> GetAsync(string id)
+        {
+            return await dbContext.Users
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        }
+
 
         public async Task<int> CountAsync()
         {

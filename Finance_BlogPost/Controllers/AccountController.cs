@@ -27,6 +27,10 @@ namespace Finance_BlogPost.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
 		{
+
+			//add custom password validation
+			ValidatePassword(registerViewModel);
+
 			if (ModelState.IsValid)
 			{
 				var identityUser = new IdentityUser
@@ -52,15 +56,16 @@ namespace Finance_BlogPost.Controllers
 			}
 
 			// Show error notification
-
 			TempData["error"] = "Unsuccessfuly Registration";
 			return View();
 		}
 
+
+
+
 		[HttpGet]
 		public IActionResult Login()
 		{
-
 			return View();
 		}
 
@@ -78,13 +83,14 @@ namespace Finance_BlogPost.Controllers
 
 			if (signInResult != null && signInResult.Succeeded)
 			{
-
-
-				return RedirectToAction("Index", "Home");
+                //show success notification
+                TempData["success"] = "Successful Login";
+                return RedirectToAction("Index", "Home");
 			}
 
-			// Show errors
-			return View();
+            // Show errors
+            TempData["error"] = "Unsuccessfuly Login";
+            return View();
 		}
 
 		[HttpGet]
@@ -94,6 +100,37 @@ namespace Finance_BlogPost.Controllers
 			return RedirectToAction("Index", "Home");
 		}
 
+        private void ValidatePassword(RegisterViewModel registerViewModel)
+        {
+            if (registerViewModel.Password is not null)
+            {
+                if (registerViewModel.Password.Length < 8)
+                {
+                    ModelState.AddModelError("Password", "Password must be at least 8 characters long.");
+                }
+                if (!registerViewModel.Password.Any(char.IsDigit))
+                {
+                    ModelState.AddModelError("Password", "Password must contain at least one digit.");
+                }
+                if (!registerViewModel.Password.Any(char.IsLower))
+                {
+                    ModelState.AddModelError("Password", "Password must contain at least one lowercase letter.");
+                }
+                if (!registerViewModel.Password.Any(char.IsUpper))
+                {
+                    ModelState.AddModelError("Password", "Password must contain at least one uppercase letter.");
+                }
+                if (!registerViewModel.Password.Any(c => !char.IsLetterOrDigit(c)))
+                {
+                    ModelState.AddModelError("Password", "Password must contain at least one non-alphanumeric character.");
+                }
+                if (registerViewModel.Password.Distinct().Count() < registerViewModel.Password.Length - 1)
+                {
+                    ModelState.AddModelError("Password", "Password must contain at least one non-alphanumeric character.");
+                }
+            }
+        }
 
-	}
+
+    }
 }

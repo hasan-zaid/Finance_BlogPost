@@ -20,6 +20,8 @@ namespace Finance_BlogPost.Repositories
 
         Task<int> CountAsync();
 
+        Task<int> CountByStatusAsync(string status);
+
         Task<IEnumerable<BlogPost>> GetPendingApprovalAsync(string? searchQuery,
                   string? sortBy,
                   string? sortDirection,

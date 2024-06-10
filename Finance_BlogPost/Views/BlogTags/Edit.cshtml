@@ -21,12 +21,14 @@
 
             <div class="mb-3">
                 <label class="form-label">Name</label>
-                <input type="text" id="name" class="form-control" asp-for="Name" />
+                <input type="text" id="name" class="form-control" asp-for="Name" required/>
+                <span class="text-danger" asp-validation-for="Name"></span>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Display Name</label>
-                <input type="text" id="displayName" class="form-control" asp-for="DisplayName" />
+                <input type="text" id="displayName" class="form-control" asp-for="DisplayName" required/>
+                <span class="text-danger" asp-validation-for="DisplayName"></span>
             </div>
 
             <div class="mb-3">
@@ -45,3 +47,8 @@
         <p>Tag not found!</p>
     }
 </div>
+
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

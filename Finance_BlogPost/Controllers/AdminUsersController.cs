@@ -99,6 +99,9 @@ namespace Finance_BlogPost.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddUserRequest addUserRequest)
         {
+            //add custom password validation
+            ValidatePassword(addUserRequest);
+
             if (ModelState.IsValid)
             {
 
@@ -149,6 +152,38 @@ namespace Finance_BlogPost.Controllers
             TempData["error"] = "Failed to add user";
             return View();
         }
+
+        private void ValidatePassword(AddUserRequest addUserRequest)
+        {
+            if (addUserRequest.Password is not null)
+            {
+                if (addUserRequest.Password.Length < 8)
+                {
+                    ModelState.AddModelError("Password", "Password must be at least 8 characters long.");
+                }
+                if (!addUserRequest.Password.Any(char.IsDigit))
+                {
+                    ModelState.AddModelError("Password", "Password must contain at least one digit.");
+                }
+                if (!addUserRequest.Password.Any(char.IsLower))
+                {
+                    ModelState.AddModelError("Password", "Password must contain at least one lowercase letter.");
+                }
+                if (!addUserRequest.Password.Any(char.IsUpper))
+                {
+                    ModelState.AddModelError("Password", "Password must contain at least one uppercase letter.");
+                }
+                if (!addUserRequest.Password.Any(c => !char.IsLetterOrDigit(c)))
+                {
+                    ModelState.AddModelError("Password", "Password must contain at least one non-alphanumeric character.");
+                }
+                if (addUserRequest.Password.Distinct().Count() < addUserRequest.Password.Length - 1)
+                {
+                    ModelState.AddModelError("Password", "Password must contain at least one non-alphanumeric character.");
+                }
+            }
+        }
+
 
 
         #region API Calls

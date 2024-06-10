@@ -143,6 +143,7 @@ namespace Finance_BlogPost.Controllers
                     PublishedDate = blogPost.PublishedDate,
                     Visible = blogPost.Visible,
                     Approval = blogPost.Approval,
+                    Author = blogPost.Author,   
                     Tags = tagsDomainModel.Select(x => new SelectListItem
                     {
                         Text = x.Name,

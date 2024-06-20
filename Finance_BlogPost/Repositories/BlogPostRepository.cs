@@ -71,6 +71,48 @@ namespace Finance_BlogPost.Repositories
             return await query.ToListAsync();
         }
 
+        public async Task<IEnumerable<BlogPost>> GetAllAuthorPostsAsync(string authorId, string? searchQuery,
+                  string? sortBy,
+                  string? sortDirection,
+                  int pageNumber = 1,
+                  int pageSize = 100)
+        {
+            var query = dbContext.BlogPosts
+                                 .Include(x=>x.Author)
+                                 .Include(x => x.Tags) // Include Tags
+                                 .AsQueryable();
+
+            // Filtering
+            if (string.IsNullOrWhiteSpace(searchQuery) == false)
+            {
+                query = query.Where(x => x.Heading.Contains(searchQuery));
+            }
+
+            // Filtering by Author
+            if (string.IsNullOrWhiteSpace(authorId) == false)
+            {
+                query = query.Where(x => x.AuthorId == authorId);
+            }
+
+            // Sorting
+            if (string.IsNullOrWhiteSpace(sortBy) == false)
+            {
+                var isDesc = string.Equals(sortDirection, "Desc", StringComparison.OrdinalIgnoreCase);
+
+                if (string.Equals(sortBy, "Heading", StringComparison.OrdinalIgnoreCase))
+                {
+                    query = isDesc ? query.OrderByDescending(x => x.Heading) : query.OrderBy(x => x.Heading);
+                }
+                // Add other sorting conditions here if needed
+            }
+
+            // Pagination
+            var skipResults = (pageNumber - 1) * pageSize;
+            query = query.Skip(skipResults).Take(pageSize);
+
+            return await query.ToListAsync();
+        }
+
 
         public async Task<BlogPost?> GetAsync(Guid id)
         {
@@ -111,6 +153,12 @@ namespace Finance_BlogPost.Repositories
         public async Task<int> CountAsync()
         {
             return await dbContext.BlogPosts.CountAsync();
+        }
+
+        public async Task<int> CountAuthorPostsAsync(string authorId)
+        {
+            return await dbContext.BlogPosts
+                                  .Where(bp => bp.AuthorId == authorId).CountAsync();
         }
 
         public async Task<int> CountByStatusAsync(string status)

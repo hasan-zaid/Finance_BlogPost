@@ -1,0 +1,160 @@
+﻿@model Finance_BlogPost.Models.ViewModels.EditBlogPostRequest
+@{
+
+}
+<div class="bg-secondary bg-opacity-10 py-2">
+    <div class="container">
+        <h1>Edit BlogPost</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    @if (Model != null)
+    {
+        <form method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Id</label>
+                <input type="text" class="form-control" id="id" asp-for="Id" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Heading</label>
+                <input type="text" class="form-control" id="heading" asp-for="Heading" required />
+                <span class="text-danger" asp-validation-for="Heading"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Page Title</label>
+                <input type="text" class="form-control" id="pageTitle" asp-for="PageTitle" required />
+                <span class="text-danger" asp-validation-for="PageTitle"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Content</label>
+                <textarea class="form-control" id="content" asp-for="Content" required></textarea>
+                <span class="text-danger" asp-validation-for="Content"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Short Description</label>
+                <input type="text" class="form-control" id="shortDescription" asp-for="ShortDescription" required />
+                <span class="text-danger" asp-validation-for="ShortDescription"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Blog Image Upload</label>
+                <input type="file" id="blogImageUpload" class="form-control" />
+
+                @if (Model.BlogImageUrl != null)
+                {
+                    <img src="@Model.BlogImageUrl" id="blogImageDisplay" style="display:block;width: 300px;" />
+                }
+                else
+                {
+                    <img src="" id="blogmageDisplay" style="display:none;width: 300px;" />
+                }
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label">Blog Image URL</label>
+                <input type="text" class="form-control" id="blogImageUrl" asp-for="BlogImageUrl" hidden />
+                <span class="text-danger" asp-validation-for="BlogImageUrl"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">URL Handle</label>
+                <input type="text" class="form-control" id="urlHandle" asp-for="UrlHandle" required />
+                <span class="text-danger" asp-validation-for="UrlHandle"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Published Date</label>
+                <input type="date" class="form-control" id="publishedDate" asp-for="PublishedDate" required />
+                <span class="text-danger" asp-validation-for="PublishedDate"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Author</label>
+                <input type="text" class="form-control" id="author" asp-for="@Model.Author.UserName" readonly />
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" id="visible" asp-for="Visible">
+                <label class="form-check-label">
+                    Is Visible?
+                </label>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tags</label>
+                <select class="form-select"
+                        asp-items="@Model.Tags"
+                        asp-for="SelectedTags">
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Approval Status</label>
+                <input type="text" class="form-control" id="approval" asp-for="Approval" readonly />
+            </div>
+
+            <div class="mb-3 d-flex">
+                <button type="submit" class="btn btn-dark">Update</button>
+
+            </div>
+
+        </form>
+    }
+
+    else
+    {
+        <p>No blog post found!</p>
+
+    }
+
+
+</div>
+
+
+
+
+
+
+
+@section Scripts {
+
+    @* Render the validation scripts partial view *@
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        var editor = new FroalaEditor('#content', {
+            imageUploadURL: '/api/images'
+        });
+        const blogUploadElement = document.getElementById('blogImageUpload');
+        const blogImageUrlElement = document.getElementById('blogImageUrl');
+        const blogImageDisplayElement = document.getElementById('blogImageDisplay');
+
+
+        async function uploadblogImage(e) {
+            console.log(e.target.files[0]);
+
+            let data = new FormData();
+            data.append('file', e.target.files[0]);
+
+            await fetch('/api/media', {
+                method: 'POST',
+                headers: {
+                    'Aceept': '*/*',
+                },
+                body: data
+            }).then(response => response.json())
+                .then(result => {
+                    blogImageUrlElement.value = result.link;
+                    blogImageDisplayElement.src = result.link;
+                    blogImageDisplayElement.style.display = 'block';
+                });
+        }
+        blogUploadElement.addEventListener('change', uploadblogImage);
+    </script>
+}

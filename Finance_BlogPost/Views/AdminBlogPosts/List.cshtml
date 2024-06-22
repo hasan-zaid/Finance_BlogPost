@@ -63,6 +63,32 @@
                         
                     </th>
                     <th>Tags</th>
+                    <th>Visibility</th>
+                    <th>
+                        Date Published
+                        <span>
+                            <span>
+                                <a class="btn btn-light"
+                                   asp-controller="AdminBlogPosts"
+                                   asp-action="List"
+                                   asp-route-sortBy="PublishedDate"
+                                   asp-route-sortDirection="Asc"
+                                   asp-route-searchQuery="@ViewBag.SearchQuery">
+                                    <i class="bi bi-arrow-up"></i>
+                                </a>
+                            </span>
+                            <span>
+                                <a class="btn btn-light"
+                                   asp-controller="AdminBlogPosts"
+                                   asp-action="List"
+                                   asp-route-sortBy="PublishedDate"
+                                   asp-route-sortDirection="Desc"
+                                   asp-route-searchQuery="@ViewBag.SearchQuery">
+                                    <i class="bi bi-arrow-down"></i>
+                                </a>
+                            </span>
+                        </span>
+                    </th>
                     <th> </th>
                 </tr>
             </thead>
@@ -80,6 +106,8 @@
                                 }
                             </div>
                         </td>
+                        <td>@blogPost.Visible</td>
+                        <td>@blogPost.PublishedDate</td>
                         <td>
                             <div class="w-75 btn-group" role="group">
                                 <a asp-controller="AdminBlogPosts" asp-action="Edit" asp-route-id="@blogPost.Id" class="btn btn-primary mx-2">

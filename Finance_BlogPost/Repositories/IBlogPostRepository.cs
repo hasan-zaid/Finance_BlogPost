@@ -14,6 +14,7 @@ namespace Finance_BlogPost.Repositories
                   string? searchQuery,
                   string? sortBy,
                   string? sortDirection,
+                  string? status,
                   int pageNumber = 1,
                   int pageSize = 100);
 

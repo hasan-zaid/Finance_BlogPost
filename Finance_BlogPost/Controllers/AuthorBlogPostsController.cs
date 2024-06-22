@@ -14,12 +14,14 @@ namespace Finance_BlogPost.Controllers
     {
         private readonly ITagRepository tagRepository;
         private readonly IBlogPostRepository blogPostRepository;
+        private readonly IBlogPostRejectionRepository blogPostRejectionRepository;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public AuthorBlogPostsController(ITagRepository tagRepository, IBlogPostRepository blogPostRepository, UserManager<IdentityUser> userManager)
+        public AuthorBlogPostsController(ITagRepository tagRepository, IBlogPostRepository blogPostRepository, IBlogPostRejectionRepository blogPostRejectionRepository, UserManager<IdentityUser> userManager)
         {
             this.tagRepository = tagRepository;
             this.blogPostRepository = blogPostRepository;
+            this.blogPostRejectionRepository = blogPostRejectionRepository;
             _userManager = userManager;
         }
 
@@ -45,6 +47,7 @@ namespace Finance_BlogPost.Controllers
 
             //Get the current signed in user
             var user = await _userManager.GetUserAsync(User);
+            DateTime publishedDate = DateTime.Now;
 
 
             // Map view model to domain model
@@ -56,7 +59,7 @@ namespace Finance_BlogPost.Controllers
                 ShortDescription = addBlogPostRequest.ShortDescription,
                 BlogImageUrl = addBlogPostRequest.BlogImageUrl,
                 UrlHandle = addBlogPostRequest.UrlHandle,
-                PublishedDate = addBlogPostRequest.PublishedDate,
+                PublishedDate = publishedDate,
                 Author = user,
                 Visible = addBlogPostRequest.Visible,
                 Approval = BlogPostApproval.Pending
@@ -92,6 +95,7 @@ namespace Finance_BlogPost.Controllers
                     string? searchQuery,
                     string? sortBy,
                     string? sortDirection,
+                    string? status,
                     int pageSize = 5,
                     int pageNumber = 1)
         {
@@ -109,8 +113,7 @@ namespace Finance_BlogPost.Controllers
             {
                 pageNumber++;
             }
-
-            var blogs = await blogPostRepository.GetAllAuthorPostsAsync(user.Id, searchQuery, sortBy, sortDirection, pageNumber, pageSize);
+            var blogs = await blogPostRepository.GetAllAuthorPostsAsync(user.Id, searchQuery, sortBy, sortDirection, status, pageNumber, pageSize);
 
 
             ViewBag.TotalPages = totalPages;
@@ -121,6 +124,17 @@ namespace Finance_BlogPost.Controllers
             ViewBag.PageNumber = pageNumber;
             
             return View(blogs);
+        }
+
+        [HttpGet]
+        [ActionName("RejectedPosts")]
+        public async Task<IActionResult> RejectedPosts(string? searchQuery,
+                    string? sortBy,
+                    string? sortDirection)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var rejectedPosts = await blogPostRejectionRepository.GetRejectedPostsAsync(user.Id, searchQuery, sortBy, sortDirection);
+            return View(rejectedPosts);
         }
 
 

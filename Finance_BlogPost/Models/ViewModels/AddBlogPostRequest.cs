@@ -11,7 +11,6 @@ namespace Finance_BlogPost.Models.ViewModels
         public string ShortDescription { get; set; }
         public string BlogImageUrl { get; set; }
         public string UrlHandle { get; set; }
-        public DateTime PublishedDate { get; set; }
         public IdentityUser Author { get; set; }
         public bool Visible { get; set; }
 

@@ -43,6 +43,7 @@ namespace Finance_BlogPost.Controllers
 
             //Get the current signed in user
             var user = await _userManager.GetUserAsync(User);
+            var publishedDate = DateTime.Now;
 
 
             // Map view model to domain model
@@ -54,7 +55,7 @@ namespace Finance_BlogPost.Controllers
                 ShortDescription = addBlogPostRequest.ShortDescription,
                 BlogImageUrl = addBlogPostRequest.BlogImageUrl,
                 UrlHandle = addBlogPostRequest.UrlHandle,
-                PublishedDate = addBlogPostRequest.PublishedDate,
+                PublishedDate = publishedDate,
                 Author = user,
                 Visible = addBlogPostRequest.Visible,
                 Approval = BlogPostApproval.Approved

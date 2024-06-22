@@ -61,7 +61,10 @@ namespace Finance_BlogPost.Repositories
                 {
                     query = isDesc ? query.OrderByDescending(x => x.Heading) : query.OrderBy(x => x.Heading);
                 }
-                // Add other sorting conditions here if needed
+                else if (string.Equals(sortBy, "PublishedDate", StringComparison.OrdinalIgnoreCase))
+                {
+                    query = isDesc ? query.OrderByDescending(x => x.PublishedDate) : query.OrderBy(x => x.PublishedDate);
+                }
             }
 
             // Pagination
@@ -74,6 +77,7 @@ namespace Finance_BlogPost.Repositories
         public async Task<IEnumerable<BlogPost>> GetAllAuthorPostsAsync(string authorId, string? searchQuery,
                   string? sortBy,
                   string? sortDirection,
+                  string? status,
                   int pageNumber = 1,
                   int pageSize = 100)
         {
@@ -87,12 +91,15 @@ namespace Finance_BlogPost.Repositories
             {
                 query = query.Where(x => x.Heading.Contains(searchQuery));
             }
-
-            // Filtering by Author
-            if (string.IsNullOrWhiteSpace(authorId) == false)
+            if (string.IsNullOrWhiteSpace(status) == false && !status.Equals("Deleted"))
             {
-                query = query.Where(x => x.AuthorId == authorId);
+                if(!status.Equals("All"))
+                {
+                    query = query.Where(x => x.AuthorId == authorId && x.Approval == status);
+                }
             }
+            
+            query = query.Where(x => x.AuthorId == authorId);
 
             // Sorting
             if (string.IsNullOrWhiteSpace(sortBy) == false)
@@ -103,7 +110,11 @@ namespace Finance_BlogPost.Repositories
                 {
                     query = isDesc ? query.OrderByDescending(x => x.Heading) : query.OrderBy(x => x.Heading);
                 }
-                // Add other sorting conditions here if needed
+                else if (string.Equals(sortBy, "PublishedDate", StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("Sorting by Published Date");
+                    query = isDesc ? query.OrderByDescending(x => x.PublishedDate) : query.OrderBy(x => x.PublishedDate);
+                }
             }
 
             // Pagination

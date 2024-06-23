@@ -85,6 +85,7 @@
             <tbody>
                 @foreach (var blogPostRejection in Model)
                 {
+                    var modalId = $"reasonModal-{blogPostRejection.BlogPost.Id}";
                     <tr>
                         <td>@blogPostRejection.BlogPost.Heading</td>
                         <td>
@@ -99,18 +100,15 @@
                         <td>@blogPostRejection.BlogPost.PublishedDate</td>
                         <td>
                             <div class="w-75 btn-group" role="group">
-                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#reasonModal">View Reason</button>
-                                <div class="modal fade" id="reasonModal" tabindex="-1" role="dialog" aria-labelledby="reasonModalLabel" aria-hidden="true">
+                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#@modalId">View Reason</button>
+                                <div class="modal fade" id="@modalId" tabindex="-1" role="dialog" aria-labelledby="reasonModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="reasonModalLabel">Rejection Reason</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
                                             </div>
                                             <div class="modal-body">
-                                                <p>hiu the3er</p>
+                                                <p>@blogPostRejection.Reason</p>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -123,9 +121,6 @@
                                 </a>
                                 <a onClick=Delete("delete/@blogPostRejection.BlogPost.Id") class="btn btn-danger mx-2">
                                     <i class="bi bi-trash-fill"></i> Delete
-                                </a>
-                                <a onClick=ViewReason("hey/@blogPostRejection.Reason") class="btn btn-danger mx-2">
-                                    <i class="bi bi-trash-fill"></i> View Reason
                                 </a>
                             </div>
                         </td>
@@ -143,9 +138,5 @@ else
 @section Scripts {
     @{
             <partial name="_DeleteConfirmation" />
-    }
-
-    @{
-        <partial name="_ViewReason"/>
     }
 }

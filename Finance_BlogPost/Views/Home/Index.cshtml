@@ -1,8 +1,97 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model Finance_BlogPost.Models.ViewModels.HomeViewModel
+
+@{
+	ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- Main container for the home page content -->
+<div class="container col-xxl-8 px-4 py-5">
+	<div class="row align-items-center g-5 py-5">
+		<div class="col-12 col-lg-6">
+			<h1 class="display-5 fw-bold lh-1 mb-3">
+				Bloggie - The Dev Blog
+			</h1>
+			<p class="lead">
+				Bloggie is the home to coding blogs covering a vast range of
+				topics like HTML, CSS, Javascript, ASP.NET, C#, Angular etc.
+				Want to read the latest dev articles? Join the bloggie app and
+				get weekly blogs in your email.
+			</p>
+		</div>
+
+		<div class="col-12 col-lg-6">
+			<!-- Image for the blog -->
+			<img src="https://images.pexels.com/photos/57690/pexels-photo-57690.jpeg?auto=compress&cs=tinysrgb&w=600"
+					 alt="Bloggie - Dev blogs"
+					 class="d-block mx-lg-auto img-fluid" width="300" />
+		</div>
+	</div>
+</div>
+
+<!-- Container for displaying blog tags -->
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-6 d-flex">
+			@if (Model != null && Model.Tags.Any())
+			{
+				foreach (var tag in Model.Tags)
+				{
+					<span class="badge bg-dark me-1">
+						@tag.Name
+					</span>
+				}
+			}
+		</div>
+	</div>
+
+</div>
+
+<!-- Container for displaying blog posts -->
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-6">
+			@if (Model != null && Model.BlogPosts.Any())
+			{
+				<!-- Loop through each blog post in the model -->
+				foreach (var blogPost in Model.BlogPosts)
+				{
+					<div class="mb-5 bg-light box-shadow p-5">
+						<!-- Display the blog post's featured image -->
+						<img src="@blogPost.FeaturedImageUrl" alt="@blogPost.Heading"
+								 class="mb-2 d-block img-fluid" />
+
+						<!-- Display the blog post's heading -->
+						<h2 class="mb-4">@blogPost.Heading</h2>
+
+						<!-- Display the blog post's author and published date -->
+						<p class="mb-4">
+							Author: @blogPost.Author
+							<br />
+							Published Date: @blogPost.PublishedDate.ToShortDateString()
+						</p>
+
+						<!-- Display the blog post's tags -->
+						<p>
+							@foreach (var tag in blogPost.Tags)
+							{
+								<span class="badge bg-secondary me-1">@tag.Name</span>
+							}
+						</p>
+
+						<!-- Display the blog post's short description -->
+						<p class="mb-4">@blogPost.ShortDescription</p>
+
+						<!-- Link to read more of the blog post, dynamically generating the URL based on the blog post's UrlHandle -->
+						<a class="btn btn-dark"
+							 asp-area=""
+							 asp-controller="Blogs"
+							 asp-action="Index"
+							 asp-route-urlHandle="@blogPost.UrlHandle">
+							Read More
+						</a>
+					</div>
+				}
+			}
+		</div>
+	</div>
 </div>

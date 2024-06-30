@@ -2,40 +2,46 @@
 
 namespace Finance_BlogPost.Repositories
 {
-    public interface IBlogPostRepository
-    {
-        Task<IEnumerable<BlogPost>> GetAllAsync(string? searchQuery,
-                  string? sortBy,
-                  string? sortDirection,
-                  int pageNumber = 1,
-                  int pageSize = 100);
+	public interface IBlogPostRepository
+	{
+    // Gets all posts
+    Task<IEnumerable<BlogPost>> GetAllAsync();
 
-        Task<IEnumerable<BlogPost>> GetAllAuthorPostsAsync(string authorId,
-                  string? searchQuery,
-                  string? sortBy,
-                  string? sortDirection,
-                  string? status,
-                  int pageNumber = 1,
-                  int pageSize = 100);
+    Task<IEnumerable<BlogPost>> GetAllAsync(string? searchQuery,
+							string? sortBy,
+							string? sortDirection,
+							int pageNumber = 1,
+							int pageSize = 100);
 
-        Task<int> CountAuthorPostsAsync(string authorId);
+		Task<IEnumerable<BlogPost>> GetAllAuthorPostsAsync(string authorId,
+							string? searchQuery,
+							string? sortBy,
+							string? sortDirection,
+							string? status,
+							int pageNumber = 1,
+							int pageSize = 100);
 
-        Task<BlogPost?> GetAsync(Guid id);
+		Task<int> CountAuthorPostsAsync(string authorId);
 
-        Task<BlogPost> AddAsync(BlogPost blogPost);
+		Task<BlogPost?> GetAsync(Guid id);
 
-        Task<BlogPost?> UpdateAsync(BlogPost blogPost);
+		// Gets a single post by url handle
+		Task<BlogPost?> GetByUrlHandleAsync(string urlHandle); // <>
 
-        Task<BlogPost?> DeleteAsync(Guid id);
+		Task<BlogPost> AddAsync(BlogPost blogPost);
 
-        Task<int> CountAsync();
+		Task<BlogPost?> UpdateAsync(BlogPost blogPost);
 
-        Task<int> CountByStatusAsync(string status);
+		Task<BlogPost?> DeleteAsync(Guid id);
 
-        Task<IEnumerable<BlogPost>> GetPendingApprovalAsync(string? searchQuery,
-                  string? sortBy,
-                  string? sortDirection,
-                  int pageNumber = 1,
-                  int pageSize = 100);
-    }
+		Task<int> CountAsync();
+
+		Task<int> CountByStatusAsync(string status);
+
+		Task<IEnumerable<BlogPost>> GetPendingApprovalAsync(string? searchQuery,
+							string? sortBy,
+							string? sortDirection,
+							int pageNumber = 1,
+							int pageSize = 100);
+	}
 }

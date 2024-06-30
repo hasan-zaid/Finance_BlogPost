@@ -1,0 +1,49 @@
+﻿@model Finance_BlogPost.Models.Domain.BlogPost
+
+@{
+  // This changes the tab title to the blog page title, which is important for SEO as searchbots read this
+  ViewData["Title"] = Model.PageTitle;
+}
+
+<!-- Container for the blog post content -->
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-6">
+
+      <!-- Check if the blog post model is not null -->
+      @if (Model != null)
+      {
+        <!-- Display the blog post's heading -->
+        <h1 class="mb-3">@Model.Heading</h1>
+
+        <!-- Display the author and published date of the blog post -->
+        <div class="d-flex justify-content-between mb-3">
+          <span class="text-secondary">@Model.Author</span>
+          <span class="text-secondary">@Model.PublishedDate.ToShortDateString()</span>
+        </div>
+
+        <!-- Display the tags associated with the blog post -->
+        <div class="mb-3 d-flex">
+          @foreach (var tag in Model.Tags)
+          {
+            <span class="badge bg-secondary me-1">@tag.Name</span>
+          }
+        </div>
+
+        <!-- Display the featured image of the blog post -->
+        <img src="@Model.BlogImageUrl" class="d-block img-fluid mb-3" />
+
+        <!-- Display the content of the blog post -->
+        <div class="mb-3 blog-details-content">
+          @Html.Raw(Model.Content)
+        </div>
+      }
+      else
+      {
+        <!-- Display a message if the blog post is not found -->
+        <p>Blog Post not found!</p>
+      }
+
+    </div>
+  </div>
+</div>

@@ -39,7 +39,7 @@ namespace Finance_BlogPost.Repositories
     public async Task<IEnumerable<BlogPost>> GetAllAsync()
     {
       // Returns the list of blog posts from the database and includes the list of tags associated with each blog post
-      return await dbContext.BlogPosts.Include(x => x.Tags).ToListAsync();
+      return await dbContext.BlogPosts.Include(x => x.Author).Include(x => x.Tags).ToListAsync();
     }
 
     public async Task<IEnumerable<BlogPost>> GetAllAsync(string? searchQuery,
@@ -145,7 +145,7 @@ namespace Finance_BlogPost.Repositories
 		public async Task<BlogPost?> GetByUrlHandleAsync(string urlHandle)
 		{
 			// Returns the blog post from the database and includes the list of tags associated with the blog post
-			return await dbContext.BlogPosts.Include(x => x.Tags).FirstOrDefaultAsync(x => x.UrlHandle == urlHandle);
+			return await dbContext.BlogPosts.Include(x => x.Author).Include(x => x.Tags).FirstOrDefaultAsync(x => x.UrlHandle == urlHandle);
 		}
 
 		public async Task<BlogPost?> UpdateAsync(BlogPost blogPost)

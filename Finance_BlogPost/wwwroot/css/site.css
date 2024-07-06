@@ -25,106 +25,110 @@ body {
 /* User Profile Styling */
 
 .profile-container {
-    text-align: center;
+  text-align: center;
 }
 
 .profile-image {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    position: relative;
-    display: inline-block;
-    background: linear-gradient(45deg, #999 25%, transparent 25%) -50px 0, linear-gradient(45deg, transparent 75%, #999 75%) -50px 0, linear-gradient(45deg, transparent 75%, #999 75%), linear-gradient(45deg, #999 25%, transparent 25%);
-    background-size: 20px 20px;
-    overflow: hidden;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(45deg, #999 25%, transparent 25%) -50px 0, linear-gradient(45deg, transparent 75%, #999 75%) -50px 0, linear-gradient(45deg, transparent 75%, #999 75%), linear-gradient(45deg, #999 25%, transparent 25%);
+  background-size: 20px 20px;
+  overflow: hidden;
 }
 
-    .profile-image img {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        object-fit: cover;
-        display: none;
-    }
+  .profile-image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: none;
+  }
 
 .overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: opacity 0.3s;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
 .profile-image:hover .overlay {
-    opacity: 1;
+  opacity: 1;
 }
 
 .file-input {
-    display: none;
+  display: none;
 }
 
 .icon {
-    font-size: 2rem;
+  font-size: 2rem;
 }
 
-    .icon.delete {
-        display: none;
-    }
+  .icon.delete {
+    display: none;
+  }
 
 .form-group {
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 
 
 
 .card {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .dashboard-card ul {
-    list-style: none;
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .dashboard-card li {
-    background-color: #f9f9f9;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }
 
 .charts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
 }
 
 canvas {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .chart-container {
-    flex: 1;
-    min-width: 300px;
-    max-width: 600px;
+  flex: 1;
+  min-width: 300px;
+  max-width: 600px;
 }
 
 .doughnut-container {
-    flex: 1;
-    min-width: 300px;
-    max-width: 600px;
+  flex: 1;
+  min-width: 300px;
+  max-width: 600px;
+}
+
+.blog-details-content img {
+  max-width: 100%;
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Finance_BlogPost.Models.Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,5 +29,9 @@ namespace Finance_BlogPost.Models.ViewModels
 		public int TotalLikes { get; set; }
 		// props for whether the user has liked the blog
 		public bool Liked { get; set; }
+		// props for storing the text content of a single comment
+		public string CommentDescription { get; set; }
+		// props for storing multiple comments associated with a blog post
+		public IEnumerable<BlogComment> Comments { get; set; }
 	}
 }

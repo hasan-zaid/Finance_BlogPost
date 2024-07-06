@@ -65,6 +65,59 @@
 				<div class="mb-3 blog-details-content">
 					@Html.Raw(Model.Content)
 				</div>
+
+				<!-- Display the comments for the blog post -->
+				<div class="card">
+
+					<!-- Card Header for Comments -->
+					<div class="card-header">
+						<h5>Comments</h5>
+
+						<!-- Check if the user is signed in -->
+						@if (signInManager.IsSignedIn(User))
+						{
+							<!-- Display the comment form if the user is signed in -->
+							<form method="post">
+								<div class="mb-3">
+									<label class="form-label">Comment Description</label>
+									<input type="text" class="form-control" asp-for="CommentDescription" />
+								</div>
+								<div class="mb-3">
+									<button type="submit" class="btn btn-dark">Submit</button>
+									<!-- The hidden input fields below are used to send the corresponding signed in user id and url handle for the specific blog page accessed to the BlogsController -->
+									<input type="hidden" asp-for="Id" />
+									<input type="hidden" asp-for="UrlHandle" />
+								</div>
+							</form>
+						}
+					</div>
+
+					<!-- Card Body for Comments -->
+					<div class="card-body">
+						<!-- Check if there are any comments for the blog post -->
+						@if (Model.Comments != null && Model.Comments.Any())
+						{
+							<!-- If there are comments, loop through them and display them -->
+							@foreach (var comment in Model.Comments)
+							{
+								<!-- Individual Comment Card -->
+								<div class="card mb-3">
+									<div class="card-body">
+										<!-- Comment Description -->
+										<div>
+											@comment.Description
+										</div>
+										<!-- User Info and Date -->
+										<div class="d-flex justify-content-between">
+											<span class="text-secondary">@comment.Username</span>
+											<span class="text-secondary">@comment.PublishedDate.ToShortDateString()</span>
+										</div>
+									</div>
+								</div>
+							}
+						}
+					</div>
+				</div>
 			}
 			else
 			{

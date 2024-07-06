@@ -29,6 +29,8 @@ builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBlogPostRejectionRepository, BlogPostRejectionRepository>();
 builder.Services.AddScoped<IUserProfileImageRepository, UserProfileImageRepository>();
+// Registers the BlogPostLikeRepository implementation for the IBlogPostLikeRepository interface in the application services. This code ensures that when IBlogPostLikeRepository is requested, an instance of BlogPostLikeRepository is provided as the implementation.
+builder.Services.AddScoped<IBlogPostLikeRepository, BlogPostLikeRepository>();
 
 var app = builder.Build();
 

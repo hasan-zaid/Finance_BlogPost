@@ -1,49 +1,123 @@
-﻿@model Finance_BlogPost.Models.Domain.BlogPost
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> userManager
+
+@model Finance_BlogPost.Models.ViewModels.BlogDetailsViewModel
 
 @{
-  // This changes the tab title to the blog page title, which is important for SEO as searchbots read this
-  ViewData["Title"] = Model.PageTitle;
+	// This changes the tab title to the blog page title, which is important for SEO as searchbots read this
+	ViewData["Title"] = Model.PageTitle;
 }
 
 <!-- Container for the blog post content -->
 <div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-12 col-lg-6">
+	<div class="row justify-content-center">
+		<div class="col-12 col-lg-6">
 
-      <!-- Check if the blog post model is not null -->
-      @if (Model != null)
-      {
-        <!-- Display the blog post's heading -->
-        <h1 class="mb-3">@Model.Heading</h1>
+			<!-- Check if the blog post model is not null -->
+			@if (Model != null)
+			{
+				<!-- Display the blog post's heading -->
+				<h1 class="mb-3">@Model.Heading</h1>
 
-        <!-- Display the author and published date of the blog post -->
-        <div class="d-flex justify-content-between mb-3">
-          <span class="text-secondary">@Model.Author.UserName</span>
-          <span class="text-secondary">@Model.PublishedDate.ToShortDateString()</span>
-        </div>
+				<!-- Display the author and published date of the blog post -->
+				<div class="d-flex justify-content-between mb-3">
+					<span class="text-secondary">@Model.Author.UserName</span>
+					<span class="text-secondary">@Model.PublishedDate.ToShortDateString()</span>
+				</div>
 
-        <!-- Display the tags associated with the blog post -->
-        <div class="mb-3 d-flex">
-          @foreach (var tag in Model.Tags)
-          {
-            <span class="badge bg-secondary me-1">@tag.Name</span>
-          }
-        </div>
+				<!-- Display the number of likes for the blog post -->
+				<div class="mb-3">
+					<!-- Check if the user is signed in -->
+					@if (signInManager.IsSignedIn(User))
+					{
+						<!-- Check if the user has already liked the blog post -->
+						if (Model.Liked)
+						{
+							<!-- If the user has liked the blog post, display the filled thumbs up icon -->
+							<a style="cursor: pointer;">
+								<i class="bi bi-hand-thumbs-up-fill"></i>
+							</a>
+						}
+						else
+						{
+							<!-- If the user has not liked the blog post, display the empty thumbs up icon and trigger the JS function on element with id="btnLike" -->
+							<a id="btnLike" style="cursor: pointer;">
+								<i class="bi bi-hand-thumbs-up"></i>
+							</a>
+						}
+					}
+					<span id="totalLikes">@Model.TotalLikes</span> likes
+				</div>
 
-        <!-- Display the featured image of the blog post -->
-        <img src="@Model.BlogImageUrl" class="d-block img-fluid mb-3" />
+				<!-- Display the tags associated with the blog post -->
+				<div class="mb-3 d-flex">
+					@foreach (var tag in Model.Tags)
+					{
+						<span class="badge bg-secondary me-1">@tag.Name</span>
+					}
+				</div>
 
-        <!-- Display the content of the blog post -->
-        <div class="mb-3 blog-details-content">
-          @Html.Raw(Model.Content)
-        </div>
-      }
-      else
-      {
-        <!-- Display a message if the blog post is not found -->
-        <p>Blog Post not found!</p>
-      }
+				<!-- Display the featured image of the blog post -->
+				<img src="@Model.BlogImageUrl" class="d-block img-fluid mb-3" />
 
-    </div>
-  </div>
+				<!-- Display the content of the blog post -->
+				<div class="mb-3 blog-details-content">
+					@Html.Raw(Model.Content)
+				</div>
+			}
+			else
+			{
+				<!-- Display a message if the blog post is not found -->
+				<p>Blog Post not found!</p>
+			}
+
+		</div>
+	</div>
 </div>
+
+@section Scripts {
+	<script>
+		// Get the like button element
+		const btnLikeElement = document.getElementById("btnLike");
+		// Get the total likes element
+		const totalLikesElement = document.getElementById("totalLikes");
+
+		// Send a GET request to the BlogPostLikeController API to get the total number of likes for the blog post
+		async function getTotalLikes() {
+			fetch('/api/BlogPostLike/@Model.Id/totalLikes', {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': '*/*'
+				}
+			}).then(data => data.json())	// Convert the response to JSON
+				.then(result => totalLikesElement.innerHTML = result); // Update the total likes
+		}
+
+		// Send a POST request to the BlogPostLikeController API to add a like for the blog post
+		async function addLikeForBlog() {
+			fetch('/api/BlogPostLike/Add', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': '*/*'
+				},
+				// Include the blog post ID and user ID in the request body
+				body: JSON.stringify({
+					blogPostId: '@Model.Id',
+					userId: '@userManager.GetUserId(User)'
+				})
+			}).then(() => {
+				// Update the like button to display the filled thumbs up icon
+				btnLikeElement.innerHTML = '<i class="bi bi-hand-thumbs-up-fill"></i>';
+				// Remove the click event listener
+				btnLikeElement.removeEventListener("click", addLikeForBlog);
+				// Call the getTotalLikes function to update the total likes
+				getTotalLikes();
+			});
+		}
+		// Add a click event listener to the like button
+		btnLikeElement.addEventListener("click", addLikeForBlog);
+	</script>
+}

@@ -31,21 +31,19 @@
 					<!-- Check if the user is signed in -->
 					@if (signInManager.IsSignedIn(User))
 					{
-						<!-- Check if the user has already liked the blog post -->
-						if (Model.Liked)
-						{
-							<!-- If the user has liked the blog post, display the filled thumbs up icon -->
-							<a style="cursor: pointer;">
+						<a id="btnLike" style="cursor: pointer;">
+							<!-- Check if the user has already liked the blog post -->
+							@if (Model.Liked)
+							{
+								<!-- If the user has liked the blog post, display the filled thumbs up icon -->
 								<i class="bi bi-hand-thumbs-up-fill"></i>
-							</a>
-						}
-						else
-						{
-							<!-- If the user has not liked the blog post, display the empty thumbs up icon and trigger the JS function on element with id="btnLike" -->
-							<a id="btnLike" style="cursor: pointer;">
+							}
+							else
+							{
+								<!-- If the user has not liked the blog post, display the empty thumbs up icon -->
 								<i class="bi bi-hand-thumbs-up"></i>
-							</a>
-						}
+							}
+						</a>
 					}
 					<span id="totalLikes">@Model.TotalLikes</span> likes
 				</div>
@@ -164,13 +162,52 @@
 			}).then(() => {
 				// Update the like button to display the filled thumbs up icon
 				btnLikeElement.innerHTML = '<i class="bi bi-hand-thumbs-up-fill"></i>';
-				// Remove the click event listener
-				btnLikeElement.removeEventListener("click", addLikeForBlog);
-				// Call the getTotalLikes function to update the total likes
+				// Update the total likes count
 				getTotalLikes();
+				// Toggle the like button binding of the event listeners
+				btnLikeElement.removeEventListener("click", addLikeForBlog);
+				btnLikeElement.addEventListener("click", removeLikeForBlog);
 			});
 		}
-		// Add a click event listener to the like button
-		btnLikeElement.addEventListener("click", addLikeForBlog);
+
+		// Send a POST request to the BlogPostLikeController API to remove a like for the blog post
+		async function removeLikeForBlog() {
+			fetch('/api/BlogPostLike/Remove', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': '*/*'
+				},
+				body: JSON.stringify({
+					blogPostId: '@Model.Id',
+					userId: '@userManager.GetUserId(User)'
+				})
+			}).then(() => {
+				// Update the like button to display the empty thumbs up icon
+				btnLikeElement.innerHTML = '<i class="bi bi-hand-thumbs-up"></i>';
+				// Update the total likes count
+				getTotalLikes();
+				// Toggle the like button binding of the event listeners
+				btnLikeElement.removeEventListener("click", removeLikeForBlog);
+				btnLikeElement.addEventListener("click", addLikeForBlog);
+			});
+		}
+
+		// Initialize event listener based on the initial state
+		// Without the <text> tag, Razor will try to interpret the JavaScript code as C#, leading to errors.  It's a technique to ensure that the JavaScript code is treated as plain text and not mistakenly interpreted as part of the Razor markup.
+		@if (Model.Liked)
+		{
+			// Bind the removeLikeForBlog function to the like button if the blog post has already been liked
+			<text>
+				btnLikeElement.addEventListener("click", removeLikeForBlog);
+			</text>
+		}
+		else
+		{
+			// Bind the addLikeForBlog function to the like button if the blog post has not been liked
+			<text>
+				btnLikeElement.addEventListener("click", addLikeForBlog);
+			</text>
+		}
 	</script>
 }

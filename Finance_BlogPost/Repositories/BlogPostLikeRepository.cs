@@ -33,5 +33,20 @@ namespace Finance_BlogPost.Repositories
 		{
 			return await financeBlogDbContext.Likes.CountAsync(x => x.BlogPostId == blogPostId);
 		}
+
+		public async Task<BlogLike?> RemoveLikeForBlog(BlogLike blogLike)
+		{
+			// Check if the user has already liked the blog post.
+			var likeToRemove = await financeBlogDbContext.Likes.FirstOrDefaultAsync(x => x.BlogPostId == blogLike.BlogPostId && x.UserId == blogLike.UserId);
+
+			// If the user liked the blog post, remove it from the database.
+			if (likeToRemove != null)
+			{
+				financeBlogDbContext.Likes.Remove(likeToRemove);
+				await financeBlogDbContext.SaveChangesAsync();
+				return likeToRemove;
+			}
+			return null;
+		}
 	}
 }

@@ -83,9 +83,25 @@ namespace Finance_BlogPost.Controllers
 
 			if (signInResult != null && signInResult.Succeeded)
 			{
-                //show success notification
+                // Show success notification
                 TempData["success"] = "Successful Login";
-                return RedirectToAction("Index", "Home");
+                var user = await userManager.GetUserAsync(User);
+                var roles = await userManager.GetRolesAsync(user);
+
+                if (roles.Contains("Admin"))
+                {
+                    return RedirectToAction("Index", "AdminDashboard");
+                }
+      
+                else if (roles.Contains("Author"))
+                {
+                    return RedirectToAction("List", "AuthorBlogPosts");
+                }
+                else 
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                
 			}
 
             // Show errors

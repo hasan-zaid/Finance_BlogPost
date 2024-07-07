@@ -1,13 +1,14 @@
 ﻿@model List<Finance_BlogPost.Models.Domain.Tag>
 
 @{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
     int nextPage = Convert.ToInt32(ViewBag.PageNumber) + 1;
     int prevPage = Convert.ToInt32(ViewBag.PageNumber) - 1;
 }
 
-<div class="bg-secondary bg-opacity-10 py-2">
+<div class="py-2">
     <div class="container">
-        <h1>Blog Post Tags</h1>
+        <h2>Blog Post Tags</h2>
     </div>
 </div>
 
@@ -29,96 +30,102 @@
 
 <div class="container mt-3">
     <div class="mb-3 d-flex justify-content-end">
-        <a class="btn btn-dark" asp-controller="BlogTags" asp-action="Add">
-            Create Tag
+        <a class="btn light-btn" asp-controller="BlogTags" asp-action="Add">
+            Add Tag
         </a>
     </div>
 
     @if (Model != null && Model.Any())
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>
-                        Name
-                        <span>
-                            <span>
-                                <a class="btn btn-light"
-                                   asp-controller="BlogTags"
-                                   asp-action="List"
-                                   asp-route-sortBy="Name"
-                                   asp-route-sortDirection="Asc"
-                                   asp-route-searchQuery="@ViewBag.SearchQuery">
-                                    <i class="bi bi-arrow-up"></i>
-                                </a>
-                            </span>
-                            <span>
-                                <a class="btn btn-light"
-                                   asp-controller="BlogTags"
-                                   asp-action="List"
-                                   asp-route-sortBy="Name"
-                                   asp-route-sortDirection="Desc"
-                                   asp-route-searchQuery="@ViewBag.SearchQuery">
-                                    <i class="bi bi-arrow-down"></i>
-                                </a>
-                            </span>
-                        </span>
-
-                    </th>
-                    <th>
-                        Display Name
-                        <span>
-                            <span>
-                                <a class="btn btn-light"
-                                   asp-controller="BlogTags"
-                                   asp-action="List"
-                                   asp-route-sortBy="DisplayName"
-                                   asp-route-sortDirection="Asc"
-                                   asp-route-searchQuery="@ViewBag.SearchQuery">
-                                    <i class="bi bi-arrow-up"></i>
-                                </a>
-                            </span>
-                            <span>
-                                <a class="btn btn-light"
-                                   asp-controller="BlogTags"
-                                   asp-action="List"
-                                   asp-route-sortBy="DisplayName"
-                                   asp-route-sortDirection="Desc"
-                                   asp-route-searchQuery="@ViewBag.SearchQuery">
-                                    <i class="bi bi-arrow-down"></i>
-                                </a>
-                            </span>
-                        </span>
-                    </th>
-                    <th> </th>
-                    <th> </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var tag in Model)
-                {
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>@tag.Id</td>
-                        <td>@tag.Name</td>
-                        <td>@tag.DisplayName</td>
-
-                        <td>
-                            <div class="w-75 btn-group" role="group">
-                                <a asp-controller="BlogTags" asp-action="Edit" asp-route-id="@tag.Id" class="btn btn-primary mx-2">
-                                    <i class="bi bi-pencil-square"></i> Edit
-                                </a>
-                                <a onClick=Delete("delete/@tag.Id") class="btn btn-danger mx-2">
-                                    <i class="bi bi-trash-fill"></i> Delete
-                                </a>
+                        <th>Id</th>
+                        <th>
+                            
+                            <div class="d-flex flex-row justify-content-center align-items-center">
+                                Name
+                                <span>
+                                    <a class="btn btn-link"
+                                       asp-controller="BlogTags"
+                                       asp-action="List"
+                                       asp-route-sortBy="Name"
+                                       asp-route-sortDirection="Asc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-up"></i>
+                                    </a>
+                                </span>
+                                <span>
+                                    <a class="btn btn-link"
+                                       asp-controller="BlogTags"
+                                       asp-action="List"
+                                       asp-route-sortBy="Name"
+                                       asp-route-sortDirection="Desc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </a>
+                                </span>
                             </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
 
-        <nav aria-label="Page navigation example">
+                        </th>
+                        <th>
+
+                            <div class="d-flex flex-row justify-content-center align-items-center">
+                                Display Name
+                                <span>
+                                    <a class="btn btn-link"
+                                       asp-controller="BlogTags"
+                                       asp-action="List"
+                                       asp-route-sortBy="DisplayName"
+                                       asp-route-sortDirection="Asc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-up"></i>
+                                    </a>
+                                </span>
+                                <span>
+                                    <a class="btn btn-link"
+                                       asp-controller="BlogTags"
+                                       asp-action="List"
+                                       asp-route-sortBy="DisplayName"
+                                       asp-route-sortDirection="Desc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </th>
+                        <th> </th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var tag in Model)
+                    {
+                        <tr>
+                            <td>@tag.Id</td>
+                            <td>@tag.Name</td>
+                            <td>@tag.DisplayName</td>
+
+                            <td>
+                                <div class="w-75 btn-group" role="group">
+                                    <a asp-controller="BlogTags" asp-action="Edit" asp-route-id="@tag.Id" class="btn btn-primary mx-2">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <a onClick=Delete("delete/@tag.Id") class="btn btn-danger mx-2">
+                                        <i class="bi bi-trash-fill"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+        </div>
+
+        <nav aria-label="Page navigation example" class="bg-transparent mt-5  d-flex justify-content-center">
             <ul class="pagination">
                 <li class="page-item">
                     <a class="page-link"

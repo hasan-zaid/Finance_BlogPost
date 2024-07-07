@@ -90,6 +90,9 @@ namespace Finance_BlogPost.Controllers
 				// Retrieve blog comments from the repository based on the given blog post Id
 				var blogCommentsDomainModel = await blogPostCommentRepository.GetCommentsByBlogId(blogPost.Id);
 
+				// Order the blog comments by published date in descending order
+				blogCommentsDomainModel = blogCommentsDomainModel.OrderByDescending(comment => comment.PublishedDate);
+
 				// Initialize a new list to hold the transformed blog comments for the view
 				var blogCommentsForView = new List<Models.ViewModels.BlogComment>();
 

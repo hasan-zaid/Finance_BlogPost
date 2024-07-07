@@ -1,8 +1,12 @@
 ﻿﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> UserManager
 @{
 	var username = User?.Identity?.Name;
 	var firstLetter = string.IsNullOrEmpty(username) ? "" : username[0].ToString().ToUpper();
+	var userId = UserManager.GetUserId(User);
+	var currentUser = await UserManager.GetUserAsync(User);
+	var roles = await UserManager.GetRolesAsync(currentUser);
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -69,7 +73,16 @@
 		<main role="main" class="pb-3">
 			<partial name="_Notification" />
 			<div class="sidebar-container">
+				@if (roles.Contains("Admin"))
+				{
 					<partial name="_AdminSidebar" />
+				}
+
+		
+				else if (roles.Contains("Author"))
+				{
+					<partial name="_AuthorSidebar" />
+				}
 				<section class="user-main dashboard-content p-5">
 					@RenderBody()
 				</section>
@@ -78,7 +91,16 @@
 	</div>
 
 
-	<script src="/js/admin_sidebar.js"></script>
+
+	@if (roles.Contains("Admin"))
+	{
+		<script src="/js/admin_sidebar.js"></script>
+	}
+
+	else if (roles.Contains("Author"))
+	{
+		<script src="/js/author_sidebar.js"></script>
+	}
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

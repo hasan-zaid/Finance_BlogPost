@@ -9,23 +9,35 @@
             <img src="/images/login_banner.svg" class="figure-img img-fluid rounded h-100" alt="Login Banner" data-aos="fade-up">
         </figure>
     </div>
-    <div class="col-md-6 p-5 d-flex flex-column justify-content-center align-items">
-        <p class="display-4 landing-page-heading text-center mt-3">Welcome back!</p>
-        <form class="p-3" method="post">
-            <div class="form-group mb-4">
+    <div class="col-md-6 p-3 d-flex flex-column justify-content-center align-items">
+        <p class="display-4 landing-page-heading text-center mt-1">Welcome back!</p>
+        <form class="p-2" method="post">
+            <div class="form-group mb-2">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" id="username" class="form-control" asp-for="Username" required />
                 <span class="text-danger" asp-validation-for="Username"></span>
             </div>
-            <div class="form-group mb-4">
+            <div class="form-group mb-2">
                 <label for="password" class="form-label">Password</label>
                 <input type="password" id="password" class="form-control" asp-for="Password" required />
                 <span class="text-danger" asp-validation-for="Password"></span>
             </div>
-            <div class="d-flex justify-content-center align-items-center mt-5">
+            <div class="d-flex justify-content-center align-items-center mt-4">
                 <button type="submit" class="btn light-btn">Sign In</button>
             </div>
+            <div class="text-center my-2">
+                <hr class="w-75 mx-auto">
+                <span class="position-relative px-3" style="top: -12px;">OR</span>
+            </div>
         </form>
+        <div class="d-flex justify-content-center align-items-center">
+            <form asp-controller="Account" asp-action="GoogleLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+                <button type="submit" name="provider" value="GitHub" class="btn light-btn d-flex justify-content-center align-items-center w-100">
+                    <i class="bi bi-google m-2"></i>
+                    <span class="text-center">Continue with Google</span>
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 

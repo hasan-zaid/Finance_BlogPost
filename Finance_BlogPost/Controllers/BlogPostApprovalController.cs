@@ -12,13 +12,15 @@ namespace Finance_BlogPost.Controllers
         private readonly IBlogPostRepository blogPostRepository;
         private readonly ITagRepository tagRepository;
         private readonly IBlogPostRejectionRepository blogPostRejectionRepository;
+        private readonly INotificationRepository notificationRepository;
 
 
-        public BlogPostApprovalController(IBlogPostRepository blogPostRepository, ITagRepository tagRepository, IBlogPostRejectionRepository blogPostRejectionRepository)
+        public BlogPostApprovalController(IBlogPostRepository blogPostRepository, ITagRepository tagRepository, IBlogPostRejectionRepository blogPostRejectionRepository, INotificationRepository notificationRepository)
         {
             this.blogPostRepository = blogPostRepository;
             this.tagRepository = tagRepository;
             this.blogPostRejectionRepository = blogPostRejectionRepository;
+            this.notificationRepository = notificationRepository;
         }
 
 
@@ -108,6 +110,18 @@ namespace Finance_BlogPost.Controllers
                 {
                     // Show success notification
                     TempData["success"] = "The blog post has been successfully approved";
+
+                    // Create and send the notification
+                    var notification = new Notification
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = blogPost.Author.Id,
+                        Message = "Your blog post has been approved by the admin",
+                        SentTime = DateTime.UtcNow,
+                        IsRead = false
+                    };
+                    notificationRepository.Add(notification);
+
                     return RedirectToAction("List");
                 }
 
@@ -144,6 +158,18 @@ namespace Finance_BlogPost.Controllers
                     {
                         // Show success notification
                         TempData["success"] = "The blog post has been successfully rejected";
+
+                        // Create and send the notification
+                        var notification = new Notification
+                        {
+                            Id = Guid.NewGuid(),
+                            UserId = blogPost.Author.Id,
+                            Message = "Your blog post has been rejected by the admin",
+                            SentTime = DateTime.UtcNow,
+                            IsRead = false
+                        };
+                        notificationRepository.Add(notification);
+
                         return RedirectToAction("List");
                     }
                 }

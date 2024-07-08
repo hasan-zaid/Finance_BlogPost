@@ -1,92 +1,82 @@
 ﻿@model Finance_BlogPost.Models.ViewModels.AdminDashboardViewModel
 @{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
-
-
-<h1 class="my-4">Welcome back, Admin!</h1>
-<div class="row mt-5">
-    <div class="col-md-2 offset-md-1">
-        <div class="card text-center h-100">
-            <div class="card-body">
-                <h3>Total Blog Posts</h3>
-                <p class="display-4">@Model.TotalBlogPosts</p>
+        <h2 class="my-4">Welcome back, Admin!</h2>
+        <div class="row mt-5">
+            <div class="col-md-3">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <h3 class="text-center">Total <br/>Blog Posts</h3c>
+                        <p class="display-4">@Model.TotalBlogPosts</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <h3 class="text-center">Total <br/>Tags</h3>
+                        <p class="display-4">@Model.TotalTags</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <h3 class="text-center">Total <br/>Users</h3>
+                        <p class="display-4">@Model.TotalUsers</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center h-100">
+                    <div class="card-body">
+                        <h3 class="text-center">Pending <br/>Approvals</h3>
+                        <p class="display-4">@Model.PendingApprovals</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-2">
-        <div class="card text-center h-100">
-            <div class="card-body">
-                <h3>Total Tags</h3>
-                <p class="display-4">@Model.TotalTags</p>
+        <div class="row dashboard-card mt-5">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2>Recent Blog Posts</h2>
+                        <ul>
+                            @foreach (var post in Model.RecentBlogPosts)
+                            {
+                                <li>@post.PublishedDate.ToString("yyyy-MM-dd") - @post.Heading by @post.AuthorName</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2>Top Tags</h2>
+                        <ul>
+                            @foreach (var tag in Model.TagUsage)
+                            {
+                                <li>@tag.Name (@tag.UsageCount uses)</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-2">
-        <div class="card text-center h-100">
-            <div class="card-body">
-                <h3>Total Users</h3>
-                <p class="display-4">@Model.TotalUsers</p>
+        <div class="charts">
+            <div class="chart-container">
+                <canvas id="blogPostsChart"></canvas>
+            </div>
+            <div class="doughnut-container">
+                <canvas id="tagsChart"></canvas>
             </div>
         </div>
-    </div>
-    <div class="col-md-2">
-        <div class="card text-center h-100">
-            <div class="card-body">
-                <h3>Pending Approvals</h3>
-                <p class="display-4">@Model.PendingApprovals</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <div class="card text-center h-100">
-            <div class="card-body">
-                <h3>Rejected Posts</h3>
-                <p class="display-4">@Model.RejectedPosts</p>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row dashboard-card mt-5">
-    <div class="col-md-6">
-        <div class="card mb-4">
-            <div class="card-body">
-                <h2>Recent Blog Posts</h2>
-                <ul>
-                    @foreach (var post in Model.RecentBlogPosts)
-                    {
-                        <li>@post.PublishedDate.ToString("yyyy-MM-dd") - @post.Heading by @post.AuthorName</li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h2>Top Tags</h2>
-                <ul>
-                    @foreach (var tag in Model.TagUsage)
-                    {
-                        <li>@tag.Name (@tag.UsageCount uses)</li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="charts">
-    <div class="chart-container">
-        <canvas id="blogPostsChart"></canvas>
-    </div>
-    <div class="doughnut-container">
-        <canvas id="tagsChart"></canvas>
-    </div>
-</div>
-
 
 
 @section Scripts{
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ 
     <script>
         var ctx1 = document.getElementById('blogPostsChart').getContext('2d');
         var blogPostsChart = new Chart(ctx1, {

@@ -16,13 +16,15 @@ namespace Finance_BlogPost.Controllers
 		private readonly IBlogPostRepository blogPostRepository;
 		private readonly IBlogPostRejectionRepository blogPostRejectionRepository;
 		private readonly UserManager<IdentityUser> _userManager;
+        private readonly INotificationRepository notificationRepository;
 
-		public AuthorBlogPostsController(ITagRepository tagRepository, IBlogPostRepository blogPostRepository, IBlogPostRejectionRepository blogPostRejectionRepository, UserManager<IdentityUser> userManager)
+        public AuthorBlogPostsController(ITagRepository tagRepository, IBlogPostRepository blogPostRepository, IBlogPostRejectionRepository blogPostRejectionRepository, UserManager<IdentityUser> userManager, INotificationRepository notificationRepository)
 		{
 			this.tagRepository = tagRepository;
 			this.blogPostRepository = blogPostRepository;
 			this.blogPostRejectionRepository = blogPostRejectionRepository;
-			_userManager = userManager;
+			this._userManager = userManager;
+			this.notificationRepository = notificationRepository;
 		}
 
 
@@ -85,7 +87,20 @@ namespace Finance_BlogPost.Controllers
 			await blogPostRepository.AddAsync(blogPost);
 			TempData["success"] = "Blog Post has been added successfully";
 
-			return RedirectToAction("List");
+            // Create and send the notification to the admin
+            var admin = (await _userManager.GetUsersInRoleAsync("Admin")).FirstOrDefault();
+            var notification = new Notification
+            {
+                Id = Guid.NewGuid(),
+                UserId = admin.Id,
+                Message = $"{user.UserName} has added a new blog post",
+                SentTime = DateTime.UtcNow,
+                IsRead = false
+            };
+            notificationRepository.Add(notification);
+
+
+            return RedirectToAction("List");
 		}
 
 

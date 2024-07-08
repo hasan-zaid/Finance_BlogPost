@@ -1,8 +1,11 @@
 ﻿@model List<Finance_BlogPost.Models.Domain.BlogPostRejection>
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
 
-<div class="bg-secondary bg-opacity-10 py-2">
+}
+<div class="py-2">
     <div class="container">
-        <h1>Your Rejected BlogPosts</h1>
+        <h2>Your Rejected BlogPosts</h2>
     </div>
 </div>
 
@@ -23,111 +26,114 @@
 <div class="container py-5">
     @if (Model != null && Model.Any())
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        Heading
-                        <span>
-                            <span>
-                                <a class="btn btn-light"
-                                   asp-controller="AuthorBlogPosts"
-                                   asp-action="RejectedPosts"
-                                   asp-route-sortBy="Heading"
-                                   asp-route-sortDirection="Asc"
-                                   asp-route-searchQuery="@ViewBag.SearchQuery">
-                                    <i class="bi bi-arrow-up"></i>
-                                </a>
-                            </span>
-                            <span>
-                                <a class="btn btn-light"
-                                   asp-controller="AuthorBlogPosts"
-                                   asp-action="RejectedPosts"
-                                   asp-route-sortBy="Heading"
-                                   asp-route-sortDirection="Desc"
-                                   asp-route-searchQuery="@ViewBag.SearchQuery">
-                                    <i class="bi bi-arrow-down"></i>
-                                </a>
-                            </span>
-                        </span>
-
-                    </th>
-                    <th>Tags</th>
-                    <th>Visibility</th>
-                    <th>
-                        Date Published
-                        <span>
-                            <span>
-                                <a class="btn btn-light"
-                                   asp-controller="AuthorBlogPosts"
-                                   asp-action="RejectedPosts"
-                                   asp-route-sortBy="PublishedDate"
-                                   asp-route-sortDirection="Asc"
-                                   asp-route-searchQuery="@ViewBag.SearchQuery">
-                                    <i class="bi bi-arrow-up"></i>
-                                </a>
-                            </span>
-                            <span>
-                                <a class="btn btn-light"
-                                   asp-controller="AuthorBlogPosts"
-                                   asp-action="RejectedPosts"
-                                   asp-route-sortBy="PublishedDate"
-                                   asp-route-sortDirection="Desc"
-                                   asp-route-searchQuery="@ViewBag.SearchQuery">
-                                    <i class="bi bi-arrow-down"></i>
-                                </a>
-                            </span>
-                        </span>
-                    </th>
-                    <th> </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var blogPostRejection in Model)
-                {
-                    var modalId = $"reasonModal-{blogPostRejection.BlogPost.Id}";
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>@blogPostRejection.BlogPost.Heading</td>
-                        <td>
-                            <div class="d-flex">
-                                @foreach (var tag in blogPostRejection.BlogPost.Tags)
-                                {
-                                    <span class="badge bg-secondary me-1">@tag.Name</span>
-                                }
+                        <th>
+                            <div class="d-flex flex-row justify-content-center align-items-center">
+                                Heading
+                                <span>
+                                    <a class="btn btn-link"
+                                       asp-controller="AuthorBlogPosts"
+                                       asp-action="RejectedPosts"
+                                       asp-route-sortBy="Heading"
+                                       asp-route-sortDirection="Asc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-up"></i>
+                                    </a>
+                                </span>
+                                <span>
+                                    <a class="btn btn-link"
+                                       asp-controller="AuthorBlogPosts"
+                                       asp-action="RejectedPosts"
+                                       asp-route-sortBy="Heading"
+                                       asp-route-sortDirection="Desc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </a>
+                                </span>
                             </div>
-                        </td>
-                        <td>@blogPostRejection.BlogPost.Visible</td>
-                        <td>@blogPostRejection.BlogPost.PublishedDate</td>
-                        <td>
-                            <div class="w-75 btn-group" role="group">
-                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#@modalId">View Reason</button>
-                                <div class="modal fade" id="@modalId" tabindex="-1" role="dialog" aria-labelledby="reasonModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="reasonModalLabel">Rejection Reason</h5>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>@blogPostRejection.Reason</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                        </th>
+                        <th>Tags</th>
+                        <th>Visibility</th>
+                        <th>
+                            <div class="d-flex flex-row justify-content-center align-items-center">
+                                Date Published
+                                <span>
+                                    <a class="btn btn-link"
+                                       asp-controller="AuthorBlogPosts"
+                                       asp-action="RejectedPosts"
+                                       asp-route-sortBy="PublishedDate"
+                                       asp-route-sortDirection="Asc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-up"></i>
+                                    </a>
+                                </span>
+                                <span>
+                                    <a class="btn btn-link"
+                                       asp-controller="AuthorBlogPosts"
+                                       asp-action="RejectedPosts"
+                                       asp-route-sortBy="PublishedDate"
+                                       asp-route-sortDirection="Desc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </a>
+                                </span>
+                            </div>
+                        </th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var blogPostRejection in Model)
+                    {
+                        var modalId = $"reasonModal-{blogPostRejection.BlogPost.Id}";
+                        <tr>
+                            <td>@blogPostRejection.BlogPost.Heading</td>
+                            <td>
+                                <div class="d-flex">
+                                    @foreach (var tag in blogPostRejection.BlogPost.Tags)
+                                    {
+                                        <span class="badge bg-secondary me-1">@tag.Name</span>
+                                    }
+                                </div>
+                            </td>
+                            <td>@blogPostRejection.BlogPost.Visible</td>
+                            <td>@blogPostRejection.BlogPost.PublishedDate</td>
+                            <td>
+                                <div class="w-75 btn-group" role="group">
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#@modalId">View Reason</button>
+                                    <div class="modal fade" id="@modalId" tabindex="-1" role="dialog" aria-labelledby="reasonModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="reasonModalLabel">Rejection Reason</h5>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>@blogPostRejection.Reason</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <a asp-controller="AuthorBlogPosts" asp-action="Edit" asp-route-id="@blogPostRejection.BlogPost.Id" class="btn btn-primary mx-2">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <a onClick=Delete("delete/@blogPostRejection.BlogPost.Id") class="btn btn-danger mx-2">
+                                        <i class="bi bi-trash-fill"></i> Delete
+                                    </a>
                                 </div>
-                                <a asp-controller="AuthorBlogPosts" asp-action="Edit" asp-route-id="@blogPostRejection.BlogPost.Id" class="btn btn-primary mx-2">
-                                    <i class="bi bi-pencil-square"></i> Edit
-                                </a>
-                                <a onClick=Delete("delete/@blogPostRejection.BlogPost.Id") class="btn btn-danger mx-2">
-                                    <i class="bi bi-trash-fill"></i> Delete
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>        
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+     
 }
 else
 {

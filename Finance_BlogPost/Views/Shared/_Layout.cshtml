@@ -1,125 +1,123 @@
 ﻿﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> UserManager
+@functions {
+	public async Task<string> GetUserRolesAsync()
+	{
+		if (User?.Identity?.IsAuthenticated == true)
+		{
+			var currentUser = await UserManager.GetUserAsync(User);
+			if (currentUser != null)
+			{
+				var roles = await UserManager.GetRolesAsync(currentUser);
+				return string.Join(", ", roles); // Convert roles list to a comma-separated string
+			}
+		}
+		return string.Empty;
+	}
+}
+@{
+	var username = User?.Identity?.Name;
+	var firstLetter = string.IsNullOrEmpty(username) ? "" : username[0].ToString().ToUpper();
+	var roles = await GetUserRolesAsync(); // Call the asynchronous method
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - Finance_BlogPost</title>
+	<title>@ViewData["Title"] FinInsight </title>
+	<link rel="icon" href="/images/logo.svg" type="image/svg+xml">
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 	<link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet' type='text/css' />
-	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-	<link rel="stylesheet" href="~/Finance_BlogPost.styles.css" asp-append-version="true" />
 	<!--Bootstrap Icons CDN-->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/Finance_BlogPost.styles.css" asp-append-version="true" />
 
 </head>
 <body>
 	<header>
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light bg-body-tertiary border-bottom box-shadow mb-3">
 			<div class="container-fluid">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Finance_BlogPost</a>
+				<a class="navbar-brand" asp-controller="Home" asp-action="Index">
+					<img src="/images/logo.svg" alt="FinInsight" width="35" height="30">
+					<span style="color:#006466;">FinInsight</span>
+				</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 								aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-						</li>
-						@if (User.IsInRole("Admin"))
-						{
-							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-									Admin
-								</a>
-								<ul class="dropdown-menu">
-									<li>
-										<a class="dropdown-item"
-											 asp-area=""
-											 asp-controller="AdminDashboard"
-											 asp-action="Index">
-											Dashboard
-										</a>
-									</li>
-									<li>
-										<a class="dropdown-item"
-											 asp-area=""
-											 asp-controller="BlogTags"
-											 asp-action="List">
-											Blog Post Tags
-										</a>
-									</li>
-									<li>
-										<a class="dropdown-item"
-											 asp-area=""
-											 asp-controller="AdminBlogPosts"
-											 asp-action="List">
-											Blog Posts
-										</a>
-									</li>
-									<li>
-										<a class="dropdown-item"
-											 asp-area=""
-											 asp-controller="AdminUsers"
-											 asp-action="List">
-											Users
-										</a>
-									</li>
-									<li>
-										<a class="dropdown-item"
-											 asp-area=""
-											 asp-controller="BlogPostApproval"
-											 asp-action="List">
-											Blog Post Approval Request
-										</a>
-									</li>
-								</ul>
-
-							</li>
-						}
-
-						@if (User.IsInRole("Author"))
-						{
-							<li class="nav-item">
-								<a class="nav-link text-light" asp-area="" asp-controller="AuthorBlogPosts" asp-action="List">My BlogPosts</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link text-light" asp-area="" asp-controller="AuthorBlogPosts" asp-action="RejectedPosts">Rejected Posts</a>
-							</li>
-						}
-					</ul>
-
+				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
 					<div class="d-flex align-items-center">
 
 						@if (signInManager.IsSignedIn(User))
 						{
-							<div class="me-3 text-light">
-								<a asp-controller="UserProfile" asp-action="Details" class="text-light">
-									@User?.Identity?.Name
-								</a>
-							</div>
+							<a href="#" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+								<div class="avatar-circle">@firstLetter</div>
+							</a>
+							<ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom me-2" aria-labelledby="profileDropdown" style="border-radius:10px;">
+								<li class="dropdown-item d-flex align-items-center">
+									<div class="avatar-circle-small m-1">@firstLetter</div> @username
+								</li>
+								<li><hr class="dropdown-divider"></li>
+								<li>
+									<a href="@Url.Action("Details", "UserProfile")" class="dropdown-item d-flex align-items-center">
+										<i class="bi bi-person me-2"></i> Your Profile
+									</a>
+								</li>
+								<li>
+									@if (roles.Contains("Admin"))
+									{
+										<a href="@Url.Action("Index", "AdminDashboard")" class="dropdown-item d-flex align-items-center">
+											<i class="bi bi-house me-2"></i> Dashboard
+										</a>
+									}
+									else if (roles.Contains("Author"))
+									{
+										<a href="@Url.Action("List", "AuthorBlogPosts")" class="dropdown-item d-flex align-items-center">
+											<i class="bi bi-speedometer2 me-2"></i> Dashboard
+										</a>
+									}
+									else
+									{
+										<a href="@Url.Action("Index", "Home")" class="dropdown-item d-flex align-items-center">
+											<i class="bi bi-speedometer2 me-2"></i> Home
+										</a>
+									}
 
 
-							<a class="btn me-3 bg-light text-dark"
-								 asp-area=""
-								 asp-controller="Account"
-								 asp-action="Logout">Logout</a>
+								</li>
+								@if (roles.Contains("Admin") || roles.Contains("Author"))
+								{
+									<li>
+										<a href="@Url.Action("Index", "Notification")" class="dropdown-item d-flex align-items-center">
+											<i class="bi bi-bell me-2"></i> Notifications
+										</a>
+									</li>
+
+								}
+
+								<li><hr class="dropdown-divider"></li>
+								<li>
+									<a href="@Url.Action("Logout", "Account")" class="dropdown-item d-flex align-items-center">
+										<i class="bi bi-box-arrow-right me-2"></i> Sign Out
+									</a>
+								</li>
+							</ul>
 						}
 						else
 						{
-							<a class="btn me-3 bg-light text-dark"
+							<a class="btn me-3 light-btn"
 								 asp-area=""
 								 asp-controller="Account"
 								 asp-action="Login">Login</a>
 
-							<a class="btn me-3 bg-light text-dark"
+							<a class="btn me-3 dark-btn"
 								 asp-area=""
 								 asp-controller="Account"
 								 asp-action="Register">Register</a>
@@ -140,7 +138,7 @@
 
 	<footer class="border-top footer text-muted">
 		<div class="container">
-			&copy; 2024 - Finance_BlogPost - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+			&copy; 2024 - FinInsight - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
 		</div>
 	</footer>
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -151,7 +149,10 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
+	<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
+
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

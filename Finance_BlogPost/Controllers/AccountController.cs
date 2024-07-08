@@ -1,6 +1,7 @@
 ﻿using Finance_BlogPost.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Finance_BlogPost.Controllers
 {
@@ -83,9 +84,25 @@ namespace Finance_BlogPost.Controllers
 
 			if (signInResult != null && signInResult.Succeeded)
 			{
-                //show success notification
+                // Show success notification
                 TempData["success"] = "Successful Login";
-                return RedirectToAction("Index", "Home");
+                var user = await userManager.GetUserAsync(User);
+                var roles = await userManager.GetRolesAsync(user);
+
+                if (roles.Contains("Admin"))
+                {
+                    return RedirectToAction("Index", "AdminDashboard");
+                }
+      
+                else if (roles.Contains("Author"))
+                {
+                    return RedirectToAction("List", "AuthorBlogPosts");
+                }
+                else 
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                
 			}
 
             // Show errors
@@ -129,6 +146,72 @@ namespace Finance_BlogPost.Controllers
                     ModelState.AddModelError("Password", "Password must contain at least one non-alphanumeric character.");
                 }
             }
+        }
+
+
+        [HttpPost]
+        public IActionResult GoogleLogin(string returnUrl = null)
+        {
+            var redirectUrl = Url.Action("GoogleLoginCallback", "Account", new { ReturnUrl = returnUrl });
+            var properties = signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
+            return Challenge(properties, "Google");
+        }
+
+        public async Task<IActionResult> GoogleLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            returnUrl = returnUrl ?? Url.Content("~/");
+            if (remoteError != null)
+            {
+                ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
+                return View("Login");
+            }
+            var info = await signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            var result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            if (result.Succeeded)
+            {
+                return LocalRedirect(returnUrl);
+            }
+
+            else
+            {
+                ViewData["ReturnUrl"] = returnUrl;
+                ViewData["LoginProvider"] = info.LoginProvider;
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                return View("GoogleLoginConfirmation", new GoogleLoginConfirmationViewModel { Email = email });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GoogleLoginConfirmation(GoogleLoginConfirmationViewModel model, string returnUrl = null)
+        {
+            returnUrl = returnUrl ?? Url.Content("~/");
+            if (ModelState.IsValid)
+            {
+                var info = await signInManager.GetExternalLoginInfoAsync();
+                if (info == null)
+                {
+                    throw new ApplicationException("Error loading external login information during confirmation.");
+                }
+                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                var result = await userManager.CreateAsync(user);
+                if (result.Succeeded)
+                {
+                    result = await userManager.AddLoginAsync(user, info);
+                    if (result.Succeeded)
+                    {
+                        await signInManager.SignInAsync(user, isPersistent: false);
+                        return LocalRedirect(returnUrl);
+                    }
+                }
+            }
+
+            ViewData["ReturnUrl"] = returnUrl;
+            return View(model);
         }
 
 

@@ -1,11 +1,13 @@
 ﻿@model List<Finance_BlogPost.Models.Domain.BlogPost>
 @{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
     int nextPage = Convert.ToInt32(ViewBag.PageNumber) + 1;
     int prevPage = Convert.ToInt32(ViewBag.PageNumber) - 1;
 }
-<div class="bg-secondary bg-opacity-10 py-2">
+
+<div class="py-2">
     <div class="container">
-        <h1>All BlogPosts</h1>
+        <h2>All BlogPosts</h2>
     </div>
 </div>
 
@@ -26,105 +28,108 @@
 
 <div class="container py-5">
     <div class="mb-3 d-flex justify-content-end">
-        <a class="btn btn-dark" asp-controller="AdminBlogPosts" asp-action="Add">
+        <a class="btn light-btn" asp-controller="AdminBlogPosts" asp-action="Add">
             Create Blog Post
         </a>
     </div>
     @if (Model != null && Model.Any())
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>
-                        Heading
-                        <span>
-                            <span>
-                                <a class="btn btn-light"
-                                   asp-controller="AdminBlogPosts"
-                                   asp-action="List"
-                                   asp-route-sortBy="Heading"
-                                   asp-route-sortDirection="Asc"
-                                   asp-route-searchQuery="@ViewBag.SearchQuery">
-                                    <i class="bi bi-arrow-up"></i>
-                                </a>
-                            </span>
-                            <span>
-                                <a class="btn btn-light"
-                                   asp-controller="AdminBlogPosts"
-                                   asp-action="List"
-                                   asp-route-sortBy="Heading"
-                                   asp-route-sortDirection="Desc"
-                                   asp-route-searchQuery="@ViewBag.SearchQuery">
-                                    <i class="bi bi-arrow-down"></i>
-                                </a>
-                            </span>
-                        </span>
-                        
-                    </th>
-                    <th>Tags</th>
-                    <th>Visibility</th>
-                    <th>
-                        Date Published
-                        <span>
-                            <span>
-                                <a class="btn btn-light"
-                                   asp-controller="AdminBlogPosts"
-                                   asp-action="List"
-                                   asp-route-sortBy="PublishedDate"
-                                   asp-route-sortDirection="Asc"
-                                   asp-route-searchQuery="@ViewBag.SearchQuery">
-                                    <i class="bi bi-arrow-up"></i>
-                                </a>
-                            </span>
-                            <span>
-                                <a class="btn btn-light"
-                                   asp-controller="AdminBlogPosts"
-                                   asp-action="List"
-                                   asp-route-sortBy="PublishedDate"
-                                   asp-route-sortDirection="Desc"
-                                   asp-route-searchQuery="@ViewBag.SearchQuery">
-                                    <i class="bi bi-arrow-down"></i>
-                                </a>
-                            </span>
-                        </span>
-                    </th>
-                    <th> </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var blogPost in Model)
-                {
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>@blogPost.Id</td>
-                        <td>@blogPost.Heading</td>
-                        <td>
-                            <div class="d-flex">
-                                @foreach (var tag in blogPost.Tags)
-                                {
-                                    <span class="badge bg-secondary me-1">@tag.Name</span>
-                                }
+                        <th>Id</th>
+                        <th>
+
+                            <div class="d-flex flex-row justify-content-center align-items-center">
+                                Heading
+                                <span>
+                                    <a class="btn btn-link">
+                                       asp-controller="AdminBlogPosts"
+                                       asp-action="List"
+                                       asp-route-sortBy="Heading"
+                                       asp-route-sortDirection="Asc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-up"></i>
+                                    </a>
+                                </span>
+                                <span>
+                                    <a class="btn btn-link"
+                                       asp-controller="AdminBlogPosts"
+                                       asp-action="List"
+                                       asp-route-sortBy="Heading"
+                                       asp-route-sortDirection="Desc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </a>
+                                </span>
                             </div>
-                        </td>
-                        <td>@blogPost.Visible</td>
-                        <td>@blogPost.PublishedDate</td>
-                        <td>
-                            <div class="w-75 btn-group" role="group">
-                                <a asp-controller="AdminBlogPosts" asp-action="Edit" asp-route-id="@blogPost.Id" class="btn btn-primary mx-2">
-                                    <i class="bi bi-pencil-square"></i> Edit
-                                </a>
-                                <a onClick=Delete("delete/@blogPost.Id") class="btn btn-danger mx-2">
-                                    <i class="bi bi-trash-fill"></i> Delete
-                                </a>
+
+                        </th>
+                        <th>Tags</th>
+                        <th>Visibility</th>
+                        <th>
+                            <div class="d-flex flex-row justify-content-center align-items-center">
+                                Date Published
+                                <span>
+                                    <a class="btn btn-link"
+                                       asp-controller="AdminBlogPosts"
+                                       asp-action="List"
+                                       asp-route-sortBy="PublishedDate"
+                                       asp-route-sortDirection="Asc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-up"></i>
+                                    </a>
+                                </span>
+                                <span>
+                                    <a class="btn btn-link"
+                                       asp-controller="AdminBlogPosts"
+                                       asp-action="List"
+                                       asp-route-sortBy="PublishedDate"
+                                       asp-route-sortDirection="Desc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-arrow-down"></i>
+                                    </a>
+                                </span>
                             </div>
-                        </td>
+                        </th>
+                        <th> </th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var blogPost in Model)
+                    {
+                        <tr>
+                            <td>@blogPost.Id</td>
+                            <td>@blogPost.Heading</td>
+                            <td>
+                                <div class="d-flex">
+                                    @foreach (var tag in blogPost.Tags)
+                                    {
+                                        <span class="badge bg-secondary me-1">@tag.Name</span>
+                                    }
+                                </div>
+                            </td>
+                            <td>@blogPost.Visible</td>
+                            <td>@blogPost.PublishedDate</td>
+                            <td>
+                                <div class="w-75 btn-group" role="group">
+                                    <a asp-controller="AdminBlogPosts" asp-action="Edit" asp-route-id="@blogPost.Id" class="btn btn-primary mx-2">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <a onClick=Delete("delete/@blogPost.Id") class="btn btn-danger mx-2">
+                                        <i class="bi bi-trash-fill"></i> Delete
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    
 
-
-        <nav aria-label="Page navigation example">
+        <nav aria-label="Page navigation example" class="bg-transparent mt-5  d-flex justify-content-center">
             <ul class="pagination">
                 <li class="page-item">
                     <a class="page-link"

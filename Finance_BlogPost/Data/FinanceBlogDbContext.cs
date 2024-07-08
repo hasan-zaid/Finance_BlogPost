@@ -21,6 +21,10 @@ namespace Finance_BlogPost.Data
 		public DbSet<BlogPostRejection> BlogPostRejections { get; set; }
 		public DbSet<UserProfileImage> UserProfileImages { get; set; }
 
+		public DbSet<Notification> Notifications { get; set; }
+
+		public DbSet<BookmarkPost> BookmarkPosts { get; set; }
+
 		protected override void OnModelCreating(ModelBuilder builder)
 		{
 			base.OnModelCreating(builder);

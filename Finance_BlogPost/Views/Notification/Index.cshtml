@@ -1,0 +1,59 @@
+﻿@model Finance_BlogPost.Models.ViewModels.NotificationViewModel
+@{
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between mb-4">
+        <h2>Notifications</h2>
+    </div>
+
+    <ul class="nav nav-tabs" id="notificationTabs" role="tablist" style="background-color: #fff;">
+        <li class="nav-item">
+            <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="true">All <span class="badge badge-secondary" style="background-color:#6c757d">@Model.Notifications.Count</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="unread-tab" data-toggle="tab" href="#unread" role="tab" aria-controls="unread" aria-selected="false">Unread <span class="badge badge-secondary" style="background-color:#6c757d">@Model.UnreadCount</span></a>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="notificationTabsContent">
+        <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+            @foreach (var notification in Model.Notifications)
+            {
+                <div class="card mb-3 notification @(notification.IsRead ? "" : "unread")" style="background-color: #B8E9C4;;">
+                    <div class="card-body">
+                        <p class="card-text">@notification.Message</p>
+                        <p class="card-text"><small class="text-muted">Sent at: @notification.SentTime</small></p>
+                        <form method="post" asp-action="MarkAsRead" asp-route-id="@notification.Id">
+                            <button type="submit" class="btn dark-btn" @(notification.IsRead ? "disabled" : "")>@(notification.IsRead ? "Read" : "Mark as Read")</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="tab-pane fade" id="unread" role="tabpanel" aria-labelledby="unread-tab">
+            @foreach (var notification in Model.Notifications.Where(n => !n.IsRead))
+            {
+                <div class="card mb-3 notification unread" style="background-color: #B8E9C4;">
+                    <div class="card-body">
+                        <p class="card-text">@notification.Message</p>
+                        <p class="card-text"><small class="text-muted">Sent at: @notification.SentTime</small></p>
+                        <form method="post" asp-action="MarkAsRead" asp-route-id="@notification.Id">
+                            <button type="submit" class="btn dark-btn">Mark as Read</button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#notification-bell-icon').removeClass('bi-bell').addClass('bi-bell-fill');
+        });
+    </script>
+}

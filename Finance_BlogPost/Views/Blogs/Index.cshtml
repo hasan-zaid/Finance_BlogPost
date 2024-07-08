@@ -102,8 +102,27 @@
 								<div class="card mb-3">
 									<div class="card-body">
 										<!-- Comment Description -->
-										<div>
-											@comment.Description
+										<div class="d-flex justify-content-between">
+											<span>@comment.Description</span>
+											@if (signInManager.IsSignedIn(User) && userManager.GetUserId(User) == comment.UserId.ToString())
+											{
+												<div class="d-flex justify-content-end">
+													<!-- Edit Button -->
+													<form method="post" action="/Blogs/EditComment">
+														<input type="hidden" name="commentId" value="@comment.Id" />
+														<button type="submit" style="border: 0; background-color: transparent;">
+															<i class="bi bi-pencil-fill"></i>
+														</button>
+													</form>
+													<!-- Delete Button -->
+													<form method="post" action="/Blogs/DeleteComment">
+														<input type="hidden" name="commentId" value="@comment.Id" />
+														<button type="submit" style="border: 0; background-color: transparent;">
+															<i class="bi bi-trash-fill"></i>
+														</button>
+													</form>
+												</div>
+											}
 										</div>
 										<!-- User Info and Date -->
 										<div class="d-flex justify-content-between">

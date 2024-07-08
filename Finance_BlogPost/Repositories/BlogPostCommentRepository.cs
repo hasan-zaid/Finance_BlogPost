@@ -32,5 +32,43 @@ namespace Finance_BlogPost.Repositories
 		{
 			return await financeBlogDbContext.Comments.Where(x => x.BlogPostId == blogPostId).ToListAsync();
 		}
+
+		// Retrieves from the database a specific blog post comment
+		public Task<BlogComment?> GetCommentById(Guid blogCommentId)
+		{
+			return financeBlogDbContext.Comments.FirstOrDefaultAsync(x => x.Id == blogCommentId);
+		}
+
+		// Deletes a blog post comment from the database
+		public async Task<BlogComment?> DeleteAsync(Guid blogCommentId)
+		{
+			var blogComment = await financeBlogDbContext.Comments.FindAsync(blogCommentId);
+			if (blogComment != null)
+			{
+				financeBlogDbContext.Comments.Remove(blogComment);
+				await financeBlogDbContext.SaveChangesAsync();
+				return blogComment;
+			}
+			return null;
+		}
+
+		// Updates a blog post comment in the database
+		public async Task<BlogComment?> UpdateAsync(BlogComment blogComment)
+		{
+			var existingBlogComment = await financeBlogDbContext.Comments.FindAsync(blogComment.Id);
+
+			if (existingBlogComment != null)
+			{
+				existingBlogComment.Id = blogComment.Id;
+				existingBlogComment.Description = blogComment.Description;
+				existingBlogComment.BlogPostId = blogComment.BlogPostId;
+				existingBlogComment.UserId = blogComment.UserId;
+				existingBlogComment.PublishedDate = blogComment.PublishedDate;
+				// save changes
+				await financeBlogDbContext.SaveChangesAsync();
+				return existingBlogComment;
+			}
+			return null;
+		}
 	}
 }

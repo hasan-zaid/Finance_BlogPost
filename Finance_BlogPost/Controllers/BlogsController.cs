@@ -102,9 +102,11 @@ namespace Finance_BlogPost.Controllers
 					// Create a new BlogComment object for the view with designated properties
 					var blogCommentForView = new Models.ViewModels.BlogComment
 					{
+						Id = blogComment.Id, // Set the comment Id
 						Description = blogComment.Description, // Set the description of the blog comment
 						PublishedDate = blogComment.PublishedDate, // Set the date the comment was added
-						Username = (await userManager.FindByIdAsync(blogComment.UserId.ToString())).UserName // Retrieve and set the username associated with the comment's userId
+						Username = (await userManager.FindByIdAsync(blogComment.UserId.ToString())).UserName, // Retrieve and set the username associated with the comment's userId
+						UserId = Guid.Parse(blogComment.UserId) // Set the comment's userId
 					};
 
 					// Add the transformed blog comment to the list for view
@@ -162,5 +164,64 @@ namespace Finance_BlogPost.Controllers
 			// Return a 403 Forbidden response if the user is not signed in
 			return Forbid();
 		}
+
+/*		// Action method to delete a comment
+		[HttpPost]
+		public async Task<IActionResult> DeleteComment(Guid commentId, string urlHandle)
+		{
+			if (signInManager.IsSignedIn(User))
+			{
+				var userId = Guid.Parse(userManager.GetUserId(User));
+				var comment = await blogPostCommentRepository.GetCommentByIdAsync(commentId);
+
+				if (comment != null && comment.UserId == userId)
+				{
+					await blogPostCommentRepository.DeleteAsync(commentId);
+				}
+			}
+			return RedirectToAction("Index", new { urlHandle });
+		}
+
+		// Action method to edit a comment (display edit form)
+		[HttpPost]
+		public async Task<IActionResult> EditComment(Guid commentId)
+		{
+			if (signInManager.IsSignedIn(User))
+			{
+				var userId = Guid.Parse(userManager.GetUserId(User));
+				var comment = await blogPostCommentRepository.GetCommentByIdAsync(commentId);
+
+				if (comment != null && comment.UserId == userId)
+				{
+					var editCommentViewModel = new EditCommentViewModel
+					{
+						Id = comment.Id,
+						Description = comment.Description
+					};
+
+					return View(editCommentViewModel);
+				}
+			}
+			return Forbid();
+		}
+
+		// Action method to handle the POST request to update the comment
+		[HttpPost]
+		public async Task<IActionResult> UpdateComment(EditCommentViewModel editCommentViewModel, string urlHandle)
+		{
+			if (signInManager.IsSignedIn(User))
+			{
+				var userId = Guid.Parse(userManager.GetUserId(User));
+				var comment = await blogPostCommentRepository.GetCommentByIdAsync(editCommentViewModel.Id);
+
+				if (comment != null && comment.UserId == userId)
+				{
+					comment.Description = editCommentViewModel.Description;
+					await blogPostCommentRepository.UpdateAsync(comment);
+					return RedirectToAction("Index", new { urlHandle });
+				}
+			}
+			return Forbid();
+		}*/
 	}
 }

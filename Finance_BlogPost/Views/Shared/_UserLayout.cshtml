@@ -38,6 +38,18 @@
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="d-flex flex-row justify-content-end">
+					<ul class="navbar-nav ml-auto d-flex flex-row">
+						<li class="nav-item" id="notification-container">
+							<a class="nav-link" href="@Url.Action("Index", "Notification")" id="notification-icon">
+								<i class="bi bi-bell h4 position-relative" id="notification-bell-icon">
+									<span class="position-absolute top-10 start-80 translate-middle p-1 bg-danger border border-light rounded-circle">
+										<span class="visually-hidden">New alerts</span>
+									</span>
+								</i>
+							</a>
+						</li>
+
+					</ul>
 					<div class="mx-3">
 
 						@if (signInManager.IsSignedIn(User))
@@ -112,6 +124,12 @@
 	<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script>
+		document.getElementById('book-icon').addEventListener('click', function () {
+			document.getElementById('book-icon').querySelector('i').classList.replace('bi-book', 'bi-book-fill');
+
+		});
+	</script>
 
 	@await RenderSectionAsync("Scripts", required: false)
 </body>

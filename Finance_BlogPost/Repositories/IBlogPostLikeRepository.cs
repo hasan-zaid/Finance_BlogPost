@@ -12,5 +12,8 @@ namespace Finance_BlogPost.Repositories
 
 		// Add a like for a blog post
 		Task<BlogLike> AddLikeForBlog(BlogLike blogLike);
+
+		// Remove a like for a blog post
+		Task<BlogLike?> RemoveLikeForBlog(BlogLike blogLike);
 	}
 }

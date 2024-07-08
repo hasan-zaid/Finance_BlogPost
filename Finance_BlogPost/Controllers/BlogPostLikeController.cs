@@ -41,6 +41,7 @@ namespace Bloggie.Web.Controllers
 			// Return an HTTP 200 OK response to indicate success.
 			return Ok();
 		}
+
 		// This action method handles HTTP GET requests to the "api/BlogPostLike/GetTotalLikes" route.
 		// The [FromRoute] attribute specifies that the route parameter "blogPostId" should be deserialized into a Guid object.
 		// The GetTotalLikes method of the IBlogPostLikeRepository is called to retrieve the total number of likes for the blog post with the specified ID.
@@ -51,6 +52,27 @@ namespace Bloggie.Web.Controllers
 			var totalLikes = await blogPostLikeRepository.GetTotalLikes(blogPostId);
 
 			return Ok(totalLikes);
+		}
+
+		// This action method handles HTTP POST requests to the "api/BlogPostLike/Remove" route.
+		// The [FromBody] attribute specifies that the request body should be deserialized into an AddLikeRequest object.
+		// The RemoveLikeForBlog method of the IBlogPostLikeRepository is called to remove a like from the blog post in the database.
+		[HttpPost]
+		[Route("Remove")]
+		public async Task<IActionResult> RemoveLike([FromBody] AddLikeRequest addLikeRequest)
+		{
+			// Create a new BlogLike object using the data from the request body.
+			var model = new BlogLike
+			{
+				BlogPostId = addLikeRequest.BlogPostId,
+				UserId = addLikeRequest.UserId.ToString()
+			};
+
+			// Call the repository method to remove a like from the blog post in the database.
+			await blogPostLikeRepository.RemoveLikeForBlog(model);
+
+			// Return an HTTP 200 OK response to indicate success.
+			return Ok();
 		}
 	}
 }

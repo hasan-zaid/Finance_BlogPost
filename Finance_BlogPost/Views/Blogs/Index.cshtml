@@ -31,21 +31,19 @@
 					<!-- Check if the user is signed in -->
 					@if (signInManager.IsSignedIn(User))
 					{
-						<!-- Check if the user has already liked the blog post -->
-						if (Model.Liked)
-						{
-							<!-- If the user has liked the blog post, display the filled thumbs up icon -->
-							<a style="cursor: pointer;">
+						<a id="btnLike" style="cursor: pointer;">
+							<!-- Check if the user has already liked the blog post -->
+							@if (Model.Liked)
+							{
+								<!-- If the user has liked the blog post, display the filled thumbs up icon -->
 								<i class="bi bi-hand-thumbs-up-fill"></i>
-							</a>
-						}
-						else
-						{
-							<!-- If the user has not liked the blog post, display the empty thumbs up icon and trigger the JS function on element with id="btnLike" -->
-							<a id="btnLike" style="cursor: pointer;">
+							}
+							else
+							{
+								<!-- If the user has not liked the blog post, display the empty thumbs up icon -->
 								<i class="bi bi-hand-thumbs-up"></i>
-							</a>
-						}
+							}
+						</a>
 					}
 					<span id="totalLikes">@Model.TotalLikes</span> likes
 				</div>
@@ -110,7 +108,9 @@
 										<!-- User Info and Date -->
 										<div class="d-flex justify-content-between">
 											<span class="text-secondary">@comment.Username</span>
-											<span class="text-secondary">@comment.PublishedDate.ToShortDateString()</span>
+											<!-- ToString("o") formats the DateAdded property of the comment as an ISO 8601 string (e.g., 2023-07-07T12:34:56.789Z). The "o" format specifier ensures the date is in a standard format that Day.js can easily parse. After the Razor engine processes the page, it generates the HTML code below, with the data-date attribute containing the formatted date.-->
+											@*<span class="text-secondary comment-date" data-date="2023-07-07T12:34:56.789Z"></span>*@
+											<span class="text-secondary comment-date" data-date="@comment.PublishedDate.ToString("o")"></span>
 										</div>
 									</div>
 								</div>
@@ -130,47 +130,17 @@
 </div>
 
 @section Scripts {
+	@* Pass initialLiked, blogId, and userId to likeFeature.js *@
 	<script>
-		// Get the like button element
-		const btnLikeElement = document.getElementById("btnLike");
-		// Get the total likes element
-		const totalLikesElement = document.getElementById("totalLikes");
-
-		// Send a GET request to the BlogPostLikeController API to get the total number of likes for the blog post
-		async function getTotalLikes() {
-			fetch('/api/BlogPostLike/@Model.Id/totalLikes', {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-					'Accept': '*/*'
-				}
-			}).then(data => data.json())	// Convert the response to JSON
-				.then(result => totalLikesElement.innerHTML = result); // Update the total likes
-		}
-
-		// Send a POST request to the BlogPostLikeController API to add a like for the blog post
-		async function addLikeForBlog() {
-			fetch('/api/BlogPostLike/Add', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'Accept': '*/*'
-				},
-				// Include the blog post ID and user ID in the request body
-				body: JSON.stringify({
-					blogPostId: '@Model.Id',
-					userId: '@userManager.GetUserId(User)'
-				})
-			}).then(() => {
-				// Update the like button to display the filled thumbs up icon
-				btnLikeElement.innerHTML = '<i class="bi bi-hand-thumbs-up-fill"></i>';
-				// Remove the click event listener
-				btnLikeElement.removeEventListener("click", addLikeForBlog);
-				// Call the getTotalLikes function to update the total likes
-				getTotalLikes();
-			});
-		}
-		// Add a click event listener to the like button
-		btnLikeElement.addEventListener("click", addLikeForBlog);
+		// Enclosed in single quotes to be interpreted correctly as JS
+		const initialLiked = '@Model.Liked';
+		const blogId = '@Model.Id';
+		const userId = '@userManager.GetUserId(User)';
 	</script>
+	<script src="~/js/likeFeature.js"></script>
+
+	<!-- Include Day.js and the relativeTime plugin, which allows us to format dates as relative times (e.g., "3 hours ago"). -->
+	<script src="https://cdn.jsdelivr.net/npm/dayjs/dayjs.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dayjs/plugin/relativeTime.js"></script>
+	<script src="~/js/relativeCommentTiming.js"></script>
 }

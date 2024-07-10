@@ -9,7 +9,7 @@
 
     const icon_logout = document.querySelector(".icon-logout");
 
-
+    const home = document.querySelector("#home");
     const dashboard = document.querySelector("#dashboard");
     const user = document.querySelector("#user");
     const tag = document.querySelector("#tag");
@@ -19,6 +19,11 @@
 
     let previousToggled = null;
     let currentToggled = null;
+
+
+    home.addEventListener("click", (e) => {
+        toggleMenu(home);
+    });
 
 
     dashboard.addEventListener("click", (e) => {
@@ -79,6 +84,14 @@
         menu_container.style.paddingLeft = "10px";
         menu_container.insertBefore(menu_logo, menu_container.childNodes[0]);
 
+
+
+        let p_home = document.createElement("p");
+        p_home.id = "p-home";
+        p_home.innerHTML = "Home";
+        home.style.width = "220px";
+        home.style.justifyContent = "left";
+        home.appendChild(p_home);
 
         let p_dash = document.createElement("p");
         p_dash.id = "p-dashboard";
@@ -144,6 +157,10 @@
         menu_container.style.paddingLeft = "0px";
 
         untoggleMenu(menu);
+
+        home.removeChild(document.getElementById("p-home"));
+        home.style.width = "50px";
+        home.style.justifyContent = "center";
 
         dashboard.removeChild(document.getElementById("p-dashboard"));
         dashboard.style.width = "50px";

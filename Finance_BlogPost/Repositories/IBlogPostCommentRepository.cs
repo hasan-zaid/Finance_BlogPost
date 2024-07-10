@@ -9,5 +9,14 @@ namespace Finance_BlogPost.Repositories
 
 		// Returns all comments for a specific blog post from the database.
 		Task<IEnumerable<BlogComment>> GetCommentsByBlogId(Guid blogPostId);
+
+		// Return a specific comment for a specific blog post from the database.
+		Task<BlogComment?> GetAsync(Guid blogCommentId);
+
+		// Deletes a comment for a specific blog post from the database.
+		Task<bool> DeleteCommentWithRepliesAsync(Guid blogCommentId);
+
+		// Updates a comment for a specific blog post in the database.
+		Task<BlogComment?> UpdateAsync(BlogComment blogComment);
 	}
 }

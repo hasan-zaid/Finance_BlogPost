@@ -7,6 +7,6 @@
 		public DateTime PublishedDate { get; set; }
 		public string Username { get; set; }
 		public Guid? ParentCommentId { get; set; }
-
+		public Guid UserId { get; set; }
 	}
 }

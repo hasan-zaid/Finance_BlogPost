@@ -1,0 +1,79 @@
+﻿<script>
+  async function performDelete(formId) {
+    const form = document.getElementById(formId);
+    const formData = new FormData(form);
+    const commentId = formData.get('commentId');
+    const urlHandle = formData.get('urlHandle');
+
+    try {
+      let response = await fetch(`/Blogs/DeleteComment`, {
+        method: 'POST',
+        headers: {
+          'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: commentId, urlHandle: urlHandle })
+      });
+
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        console.error('Failed to delete comment:', response.status);
+      }
+    } catch (error) {
+      console.error('Error occurred while deleting comment:', error);
+    }
+  }
+
+  function confirmDelete(commentId) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        performDelete(`deleteCommentForm-${commentId}`);
+      }
+    });
+  }
+</script>
+
+
+@* <script>
+  async function performDelete(url) {
+    try {
+      let response = await fetch(url, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        console.error('Failed to delete resource:', response.status);
+      }
+    } catch (error) {
+      console.error('Error occurred while deleting resource:', error);
+    }
+  }
+
+  function Delete(url) {
+    console.log(url)
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        performDelete(url);
+      }
+    });
+  }
+</script> *@

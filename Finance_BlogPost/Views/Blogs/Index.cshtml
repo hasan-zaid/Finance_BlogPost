@@ -78,7 +78,7 @@
 							<form method="post">
 								<div class="mb-3">
 									<label class="form-label">Comment Description</label>
-									<input type="text" class="form-control" asp-for="CommentDescription" />
+									<input type="text" class="form-control" maxlength="255" asp-for="CommentDescription" />
 								</div>
 								<div class="mb-3">
 									<button type="submit" class="btn btn-dark">Submit</button>
@@ -96,7 +96,7 @@
 						@if (Model.Comments != null && Model.Comments.Any())
 						{
 							<!-- If there are comments, loop through them and display them -->
-							@foreach (var comment in Model.Comments)
+							@foreach (var comment in Model.Comments.Where(c => c.ParentCommentId == null))
 							{
 								<!-- Individual Comment Card -->
 								<div class="card mb-3">
@@ -113,6 +113,41 @@
 											<span class="text-secondary comment-date" data-date="@comment.PublishedDate.ToString("o")"></span>
 										</div>
 									</div>
+									<!-- Check if the user is signed in -->
+									@if (signInManager.IsSignedIn(User))
+									{
+										<form method="post">
+											<div class="p-3 d-flex flex-row justify-content-between align-items-center">
+												<div class="flex-row d-flex"><div>Reply:&nbsp;&nbsp;</div><div><input type="text" maxlength="255" class="form-control" asp-for="CommentDescription" /></div></div>
+												<button type="submit" class="btn btn-dark">Submit</button>
+												<!-- The hidden input fields below are used to send the corresponding signed in user id and url handle for the specific blog page accessed to the BlogsController -->
+												<input type="hidden" asp-for="Id" />
+												<input type="hidden" asp-for="ParentCommentId" value="@comment.CommentId"/>
+												<input type="hidden" asp-for="UrlHandle" />
+											</div>
+										</form>
+									}
+
+									@if(Model.Comments.Any(c => c.ParentCommentId == comment.CommentId))
+									{
+										@foreach (var reply in Model.Comments.Where(c => c.ParentCommentId == comment.CommentId))
+										{
+											<hr style="margin: 0;">
+											<div class="card-body" style="margin-left: 1rem;">
+												<!-- Comment Description -->
+												<div>
+													@reply.Description
+												</div>
+												<!-- User Info and Date -->
+												<div class="d-flex justify-content-between">
+													<span class="text-secondary">@reply.Username</span>
+													<!-- ToString("o") formats the DateAdded property of the comment as an ISO 8601 string (e.g., 2023-07-07T12:34:56.789Z). The "o" format specifier ensures the date is in a standard format that Day.js can easily parse. After the Razor engine processes the page, it generates the HTML code below, with the data-date attribute containing the formatted date.-->
+													@*<span class="text-secondary comment-date" data-date="2023-07-07T12:34:56.789Z"></span>*@
+													<span class="text-secondary comment-date" data-date="@reply.PublishedDate.ToString("o")"></span>
+												</div>
+											</div>
+										}
+									}
 								</div>
 							}
 						}

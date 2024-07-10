@@ -32,6 +32,7 @@ namespace Finance_BlogPost.Models.ViewModels
 		// props for storing the text content of a single comment
 		public string CommentDescription { get; set; }
 		// props for storing multiple comments associated with a blog post
+		public Guid? ParentCommentId { get; set; }
 		public IEnumerable<BlogComment> Comments { get; set; }
 	}
 }

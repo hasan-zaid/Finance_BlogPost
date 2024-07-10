@@ -102,8 +102,10 @@ namespace Finance_BlogPost.Controllers
 					// Create a new BlogComment object for the view with designated properties
 					var blogCommentForView = new Models.ViewModels.BlogComment
 					{
+						CommentId = blogComment.Id, // Set the comment ID
 						Description = blogComment.Description, // Set the description of the blog comment
 						PublishedDate = blogComment.PublishedDate, // Set the date the comment was added
+						ParentCommentId = blogComment.ParentCommentId, // Set the parent comment ID
 						Username = (await userManager.FindByIdAsync(blogComment.UserId.ToString())).UserName // Retrieve and set the username associated with the comment's userId
 					};
 
@@ -151,8 +153,10 @@ namespace Finance_BlogPost.Controllers
 				{
 					BlogPostId = blogDetailsViewModel.Id,
 					Description = blogDetailsViewModel.CommentDescription,
+					ParentCommentId = blogDetailsViewModel.ParentCommentId,
 					UserId = userManager.GetUserId(User),
 					PublishedDate = DateTime.Now
+
 				};
 				// Add the comment to the repository
 				await blogPostCommentRepository.AddAsync(domainModel);

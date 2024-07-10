@@ -9,7 +9,7 @@
 
     const icon_logout = document.querySelector(".icon-logout");
 
-
+    const home = document.querySelector("#home");
     const authorPost = document.querySelector("#authorPost");
     const rejection = document.querySelector("#rejection");
 
@@ -17,6 +17,10 @@
     let previousToggled = null;
     let currentToggled = null;
 
+
+    home.addEventListener("click", (e) => {
+        toggleMenu(home);
+    });
 
 
     authorPost.addEventListener("click", (e) => {
@@ -66,6 +70,12 @@
         menu_container.insertBefore(menu_logo, menu_container.childNodes[0]);
 
 
+        let p_home = document.createElement("p");
+        p_home.id = "p-home";
+        p_home.innerHTML = "Home";
+        home.style.width = "220px";
+        home.style.justifyContent = "left";
+        home.appendChild(p_home);
 
 
         let p_authorPost = document.createElement("p");
@@ -111,6 +121,10 @@
 
         untoggleMenu(menu);
 
+
+        home.removeChild(document.getElementById("p-home"));
+        home.style.width = "50px";
+        home.style.justifyContent = "center";
 
         authorPost.removeChild(document.getElementById("p-authorPost"));
         authorPost.style.width = "50px";

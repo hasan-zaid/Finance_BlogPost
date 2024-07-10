@@ -106,14 +106,18 @@
 											<span>@comment.Description</span>
 											@if (signInManager.IsSignedIn(User) && userManager.GetUserId(User) == comment.UserId.ToString())
 											{
-												<!-- Delete Button -->
-												<form id="deleteCommentForm-@comment.CommentId" method="post">
-													<input type="hidden" name="commentId" value="@comment.CommentId" />
-													<input type="hidden" name="urlHandle" value="@Model.UrlHandle" />
-													<button type="button" style="border: 0; background-color: transparent;" onclick="confirmDelete('@comment.CommentId')">
-														<i class="bi bi-trash-fill"></i>
-													</button>
-												</form>
+												<!-- Check if the comment has any replies. Won't allow the user to delete the comment if there are replies -->
+												@if (!Model.Comments.Any(c => c.ParentCommentId == comment.CommentId))
+												{
+													<!-- Delete Button -->
+													<form id="deleteCommentForm-@comment.CommentId" method="post">
+														<input type="hidden" name="commentId" value="@comment.CommentId" />
+														<input type="hidden" name="urlHandle" value="@Model.UrlHandle" />
+														<button type="button" style="border: 0; background-color: transparent;" onclick="confirmDelete('@comment.CommentId')">
+															<i class="bi bi-trash-fill"></i>
+														</button>
+													</form>
+												}
 											}
 										</div>
 										<!-- User Info and Date -->

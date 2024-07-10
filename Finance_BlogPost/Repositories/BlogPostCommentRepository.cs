@@ -39,23 +39,18 @@ namespace Finance_BlogPost.Repositories
 			return await financeBlogDbContext.Comments.FirstOrDefaultAsync(x => x.Id == blogCommentId);
 		}
 
-		// Deletes a blog post comment and its replies from the database
-		public async Task<bool> DeleteCommentWithRepliesAsync(Guid blogCommentId)
+		// Deletes a blog post comment from the database
+		public async Task<BlogComment?> DeleteAsync(Guid blogCommentId)
 		{
-			// Retrieve the comment and its replies
-			var commentsToDelete = await financeBlogDbContext.Comments
-					.Where(c => c.Id == blogCommentId || c.ParentCommentId == blogCommentId)
-					.ToListAsync();
-
-			if (commentsToDelete.Any())
+			var blogComment = await financeBlogDbContext.Comments.FindAsync(blogCommentId);
+			if (blogComment != null)
 			{
-				financeBlogDbContext.Comments.RemoveRange(commentsToDelete);
+				financeBlogDbContext.Comments.Remove(blogComment);
 				await financeBlogDbContext.SaveChangesAsync();
-				return true;
+				return blogComment;
 			}
-			return false;
+			return null;
 		}
-
 
 		// Updates a blog post comment in the database
 		public async Task<BlogComment?> UpdateAsync(BlogComment blogComment)

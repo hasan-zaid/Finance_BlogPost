@@ -71,8 +71,8 @@
 					<div class="card-header">
 						<h5>Comments</h5>
 
-						<!-- Check if the user is signed in and only allow users with the "User" role to add comments -->
-						@if (signInManager.IsSignedIn(User) && User.IsInRole("User"))
+						<!-- Check if the user is signed in -->
+						@if (signInManager.IsSignedIn(User))
 						{
 							<!-- Display the comment form if the user is signed in -->
 							<form method="post">
@@ -106,8 +106,6 @@
 											<span>@comment.Description</span>
 											@if (signInManager.IsSignedIn(User) && userManager.GetUserId(User) == comment.UserId.ToString())
 											{
-												<!-- Check if the comment has any replies. Won't allow the user to delete the comment if there are replies -->
-												@if (!Model.Comments.Any(c => c.ParentCommentId == comment.CommentId))
 												{
 													<!-- Delete Button -->
 													<form id="deleteCommentForm-@comment.CommentId" method="post">
@@ -129,7 +127,7 @@
 										</div>
 									</div>
 									<!-- Check if the user is signed in -->
-									@if (signInManager.IsSignedIn(User) && !User.IsInRole("User"))
+									@if (signInManager.IsSignedIn(User))
 									{
 										<form method="post">
 											<div class="p-3 d-flex flex-row justify-content-between align-items-center">

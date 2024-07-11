@@ -14,7 +14,7 @@ namespace Finance_BlogPost.Repositories
 		Task<BlogComment?> GetAsync(Guid blogCommentId);
 
 		// Deletes a comment for a specific blog post from the database.
-		Task<BlogComment?> DeleteAsync(Guid blogCommentId);
+		Task<bool> DeleteCommentWithRepliesAsync(Guid blogCommentId);
 
 		// Updates a comment for a specific blog post in the database.
 		Task<BlogComment?> UpdateAsync(BlogComment blogComment);

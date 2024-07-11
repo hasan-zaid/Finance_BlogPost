@@ -172,10 +172,10 @@ namespace Finance_BlogPost.Controllers
 		[HttpPost]
 		public async Task<IActionResult> DeleteComment([FromBody] DeleteComment model)
 		{
-			// Delete the comment from the database via the repository
-			var deletedComment = await blogPostCommentRepository.DeleteAsync(model.Id);
+			// Delete the comment and its replies from the database via the repository
+			var deletedComment = await blogPostCommentRepository.DeleteCommentWithRepliesAsync(model.Id);
 
-			if (deletedComment != null)
+			if (deletedComment)
 			{
 				// Return a 200 OK response
 				return Ok();

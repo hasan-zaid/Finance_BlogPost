@@ -40,31 +40,19 @@
                     <tr>
                         <th>Id</th>
                         <th>
-
                             <div class="d-flex flex-row justify-content-center align-items-center">
                                 Heading
                                 <span>
-                                    <a class="btn btn-link">
-                                       asp-controller="AdminBlogPosts"
-                                       asp-action="List"
-                                       asp-route-sortBy="Heading"
-                                       asp-route-sortDirection="Asc"
-                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                    <a class="btn btn-link" aria-label="Sort ascending by heading" asp-controller="AdminBlogPosts" asp-action="List" asp-route-sortBy="Heading" asp-route-sortDirection="Asc" asp-route-searchQuery="@ViewBag.SearchQuery">
                                         <i class="bi bi-arrow-up"></i>
                                     </a>
                                 </span>
                                 <span>
-                                    <a class="btn btn-link"
-                                       asp-controller="AdminBlogPosts"
-                                       asp-action="List"
-                                       asp-route-sortBy="Heading"
-                                       asp-route-sortDirection="Desc"
-                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                    <a class="btn btn-link" aria-label="Sort descending by heading" asp-controller="AdminBlogPosts" asp-action="List" asp-route-sortBy="Heading" asp-route-sortDirection="Desc" asp-route-searchQuery="@ViewBag.SearchQuery">
                                         <i class="bi bi-arrow-down"></i>
                                     </a>
                                 </span>
                             </div>
-
                         </th>
                         <th>Tags</th>
                         <th>Visibility</th>
@@ -72,27 +60,18 @@
                             <div class="d-flex flex-row justify-content-center align-items-center">
                                 Date Published
                                 <span>
-                                    <a class="btn btn-link"
-                                       asp-controller="AdminBlogPosts"
-                                       asp-action="List"
-                                       asp-route-sortBy="PublishedDate"
-                                       asp-route-sortDirection="Asc"
-                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                    <a class="btn btn-link" aria-label="Sort ascending by published date" asp-controller="AdminBlogPosts" asp-action="List" asp-route-sortBy="PublishedDate" asp-route-sortDirection="Asc" asp-route-searchQuery="@ViewBag.SearchQuery">
                                         <i class="bi bi-arrow-up"></i>
                                     </a>
                                 </span>
                                 <span>
-                                    <a class="btn btn-link"
-                                       asp-controller="AdminBlogPosts"
-                                       asp-action="List"
-                                       asp-route-sortBy="PublishedDate"
-                                       asp-route-sortDirection="Desc"
-                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                    <a class="btn btn-link" aria-label="Sort descending by published date" asp-controller="AdminBlogPosts" asp-action="List" asp-route-sortBy="PublishedDate" asp-route-sortDirection="Desc" asp-route-searchQuery="@ViewBag.SearchQuery">
                                         <i class="bi bi-arrow-down"></i>
                                     </a>
                                 </span>
                             </div>
                         </th>
+
                         <th> </th>
                     </tr>
                 </thead>

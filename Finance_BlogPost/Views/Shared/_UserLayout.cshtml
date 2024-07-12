@@ -40,6 +40,11 @@
 				<div class="d-flex flex-row justify-content-end">
 					<ul class="navbar-nav ml-auto d-flex flex-row">
 						<li class="nav-item" id="notification-container">
+							<a class="nav-link" href="@Url.Action("Index", "FinanceNews")" id="news-icon">
+								<i class="bi bi-newspaper h4"></i>
+							</a>
+						</li>
+						<li class="nav-item" id="notification-container">
 							<a class="nav-link" href="@Url.Action("Index", "Notification")" id="notification-icon">
 								<i class="bi bi-bell h4 position-relative" id="notification-bell-icon">
 									<span class="position-absolute top-10 start-80 translate-middle p-1 bg-danger border border-light rounded-circle">
@@ -54,7 +59,7 @@
 
 						@if (signInManager.IsSignedIn(User))
 						{
-							<a href="#" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+							<a href="#" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration:none;">
 								<div class="avatar-circle">@firstLetter</div>
 							</a>
 							<ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom me-2" aria-labelledby="profileDropdown" style="border-radius:10px;">

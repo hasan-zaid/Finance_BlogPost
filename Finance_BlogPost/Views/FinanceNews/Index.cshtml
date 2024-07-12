@@ -1,0 +1,29 @@
+﻿@model Finance_BlogPost.Models.ViewModels.FinanceNewsViewModel
+
+<div class="container">
+    <h2 class="mt-4 mb-4 font-weight-bold">Finance Flash: Latest Financial Headlines</h2>
+
+    <div class="row">
+        @foreach (var article in Model.Articles)
+        {
+            <div class="col-md-6 mb-3">
+                <div class="card mb-4 h-100">
+                    <div class="card-body h-100 pb-2">
+                        <h5 class="card-title mb-1 fw-bold">@article.Title</h5>
+                        <p class="card-text news-card-text">@article.Description</p>
+                        @if (article.Keywords != null && article.Keywords.Any())
+                        {
+                            <div>
+                                @foreach (var keyword in article.Keywords.Take(5))
+                                {
+                                    <span class="badge badge-secondary me-1">@keyword</span>
+                                }
+                            </div>
+                        }
+                        <a href="@article.Link" class="btn dark-btn mt-2">Read More</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

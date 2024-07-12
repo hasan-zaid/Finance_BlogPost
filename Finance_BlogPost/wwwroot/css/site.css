@@ -360,3 +360,15 @@ nav{
     word-wrap: break-word;
 }
 
+
+
+/* News page styling */
+
+
+.news-card-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limit text to 3 lines */
+    -webkit-box-orient: vertical;
+}

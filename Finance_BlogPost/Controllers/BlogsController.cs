@@ -106,7 +106,8 @@ namespace Finance_BlogPost.Controllers
 						Description = blogComment.Description, // Set the description of the blog comment
 						PublishedDate = blogComment.PublishedDate, // Set the date the comment was added
 						ParentCommentId = blogComment.ParentCommentId, // Set the parent comment ID
-						Username = (await userManager.FindByIdAsync(blogComment.UserId.ToString())).UserName // Retrieve and set the username associated with the comment's userId
+						Username = (await userManager.FindByIdAsync(blogComment.UserId.ToString())).UserName, // Retrieve and set the username associated with the comment's userId
+						UserId = Guid.Parse(blogComment.UserId), // Set the user ID
 					};
 
 					// Add the transformed blog comment to the list for view
@@ -165,6 +166,23 @@ namespace Finance_BlogPost.Controllers
 			}
 			// Return a 403 Forbidden response if the user is not signed in
 			return Forbid();
+		}
+
+		// Action method to handle POST requests to delete a comment
+		[HttpPost]
+		public async Task<IActionResult> DeleteComment([FromBody] DeleteComment model)
+		{
+			// Delete the comment and its replies from the database via the repository
+			var deletedComment = await blogPostCommentRepository.DeleteCommentWithRepliesAsync(model.Id);
+
+			if (deletedComment)
+			{
+				// Return a 200 OK response
+				return Ok();
+			}
+
+			// Return a 400 Bad Request response
+			return BadRequest();
 		}
 	}
 }

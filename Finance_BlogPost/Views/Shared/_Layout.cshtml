@@ -95,6 +95,15 @@
 
 
 								</li>
+								@if (roles.Contains("User"))
+								{
+									<li>
+										<a href="@Url.Action("Index", "BookmarkPost")" class="dropdown-item d-flex align-items-center">
+											<i class="bi bi-bookmarks me-2"></i> Your Library
+										</a>
+									</li>
+
+								}
 								@if (roles.Contains("Admin") || roles.Contains("Author"))
 								{
 									<li>

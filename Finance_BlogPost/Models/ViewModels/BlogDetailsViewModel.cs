@@ -29,6 +29,10 @@ namespace Finance_BlogPost.Models.ViewModels
 		public int TotalLikes { get; set; }
 		// props for whether the user has liked the blog
 		public bool Liked { get; set; }
+
+		// props for whether the user has bookmarked the blog
+		public bool Bookmarked { get; set; }
+
 		// props for storing the text content of a single comment
 		public string CommentDescription { get; set; }
 		// props for storing multiple comments associated with a blog post

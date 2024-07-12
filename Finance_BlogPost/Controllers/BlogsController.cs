@@ -21,15 +21,17 @@ namespace Finance_BlogPost.Controllers
 		private readonly SignInManager<IdentityUser> signInManager;
 		private readonly UserManager<IdentityUser> userManager;
 		private readonly IBlogPostCommentRepository blogPostCommentRepository;
+		private readonly IBookmarkPostRepository bookmarkPostRepository;
 
 		// Constructor to initialize the blog post repository, blog post like repository, sign-in manager, user manager, and the blog post comment repository
-		public BlogsController(IBlogPostRepository blogPostRepository, IBlogPostLikeRepository blogPostLikeRepository, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IBlogPostCommentRepository blogPostCommentRepository)
+		public BlogsController(IBlogPostRepository blogPostRepository, IBlogPostLikeRepository blogPostLikeRepository, SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IBlogPostCommentRepository blogPostCommentRepository, IBookmarkPostRepository bookmarkPostRepository)
 		{
 			this.blogPostRepository = blogPostRepository;
 			this.blogPostLikeRepository = blogPostLikeRepository;
 			this.signInManager = signInManager;
 			this.userManager = userManager;
 			this.blogPostCommentRepository = blogPostCommentRepository;
+			this.bookmarkPostRepository = bookmarkPostRepository;
 		}
 
 		// Action method to handle GET requests with a URL parameter (e.g., /Blogs?urlHandle=some-handle)
@@ -115,6 +117,24 @@ namespace Finance_BlogPost.Controllers
 				}
 
 				// ==============================================================================
+				// Bookmarked
+				// ==============================================================================
+
+				var bookmarked = false;
+				// Check if the user is signed in
+				if (signInManager.IsSignedIn(User))
+				{
+					// Get all bookmarks
+					var bookmarks = await bookmarkPostRepository.GetAllAsync();
+					// Get the bookmark associated with the user id and the blogpost id
+					var bookmark = bookmarks.FirstOrDefault(x => x.UserId == userManager.GetUserId(User) && x.BlogPostId == blogPost.Id);
+					// if bookmark exists bookmarked will be marked as true else false
+					bookmarked = bookmark != null;
+
+				}
+
+
+				// ==============================================================================
 				// VIEW MODEL MAPPING
 				// ==============================================================================
 
@@ -134,7 +154,8 @@ namespace Finance_BlogPost.Controllers
 					Tags = blogPost.Tags,
 					TotalLikes = totalLikes,
 					Liked = liked,
-					Comments = blogCommentsForView
+					Comments = blogCommentsForView,
+					Bookmarked = bookmarked
 				};
 			}
 

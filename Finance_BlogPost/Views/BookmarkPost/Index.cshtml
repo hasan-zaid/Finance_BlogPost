@@ -1,0 +1,51 @@
+﻿@model List<Finance_BlogPost.Models.Domain.BlogPost>
+
+<div class="container">
+	<h2>Your Library</h2>
+	<div class="row justify-content-center">
+		<div class="col-6">
+			@if (Model != null && @Model.Any())
+			{
+				<!-- Loop through each blog post in the model -->
+				foreach (var blogPost in @Model)
+				{
+					<div class="mb-5 bg-light box-shadow p-5">
+						<!-- Display the blog post's featured image -->
+						<img src="@blogPost.BlogImageUrl" alt="@blogPost.Heading"
+							 class="mb-2 d-block img-fluid" />
+
+						<!-- Display the blog post's heading -->
+						<h2 class="mb-4">@blogPost.Heading</h2>
+
+						<!-- Display the blog post's author and published date -->
+						<p class="mb-4">
+							Author: @blogPost.Author.UserName
+							<br />
+							Published Date: @blogPost.PublishedDate.ToShortDateString()
+						</p>
+
+						<!-- Display the blog post's tags -->
+						<p>
+							@foreach (var tag in blogPost.Tags)
+							{
+								<span class="badge bg-secondary me-1">@tag.Name</span>
+							}
+						</p>
+
+						<!-- Display the blog post's short description -->
+						<p class="mb-4">@blogPost.ShortDescription</p>
+
+						<!-- Link to read more of the blog post, dynamically generating the URL based on the blog post's UrlHandle -->
+						<a class="btn btn-dark"
+						   asp-area=""
+						   asp-controller="Blogs"
+						   asp-action="Index"
+						   asp-route-urlHandle="@blogPost.UrlHandle">
+							Read More
+						</a>
+					</div>
+				}
+			}
+		</div>
+	</div>
+</div>

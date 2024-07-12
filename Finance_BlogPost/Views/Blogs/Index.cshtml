@@ -7,6 +7,9 @@
 @{
 	// This changes the tab title to the blog page title, which is important for SEO as searchbots read this
 	ViewData["Title"] = Model.PageTitle;
+
+	// Variable to decide the selection between a filled bookmark and an unfilled one, representing bookmarked and unbookmarked content, respectively.
+	var bookmarkIconClass = Model.Bookmarked ? "bi-bookmark-fill" : "bi-bookmark";
 }
 
 <!-- Container for the blog post content -->
@@ -27,25 +30,38 @@
 				</div>
 
 				<!-- Display the number of likes for the blog post -->
-				<div class="mb-3">
-					<!-- Check if the user is signed in -->
-					@if (signInManager.IsSignedIn(User))
-					{
-						<a id="btnLike" style="cursor: pointer;">
-							<!-- Check if the user has already liked the blog post -->
-							@if (Model.Liked)
+				<div class="mb-3 d-flex justify-content-between">
+					<div>
+						<!-- Check if the user is signed in -->
+						@if (signInManager.IsSignedIn(User))
+						{
+							<a id="btnLike" style="cursor: pointer;">
+								<!-- Check if the user has already liked the blog post -->
+								@if (Model.Liked)
+								{
+									<!-- If the user has liked the blog post, display the filled thumbs up icon -->
+									<i class="bi bi-hand-thumbs-up-fill"></i>
+								}
+								else
+								{
+									<!-- If the user has not liked the blog post, display the empty thumbs up icon -->
+									<i class="bi bi-hand-thumbs-up"></i>
+								}
+							</a>
+						}
+						<span id="totalLikes">@Model.TotalLikes</span> likes
+					</div>
+					<div style="cursor:pointer;">
+						<!-- Check if the user is signed in -->
+						@if (signInManager.IsSignedIn(User))
+						{
+							if (User.IsInRole("User"))
 							{
-								<!-- If the user has liked the blog post, display the filled thumbs up icon -->
-								<i class="bi bi-hand-thumbs-up-fill"></i>
+								<i class="bi @bookmarkIconClass" onclick="toggleBookmark('@Model.Id')"></i>
 							}
-							else
-							{
-								<!-- If the user has not liked the blog post, display the empty thumbs up icon -->
-								<i class="bi bi-hand-thumbs-up"></i>
-							}
-						</a>
-					}
-					<span id="totalLikes">@Model.TotalLikes</span> likes
+
+						}
+					</div>
 				</div>
 
 				<!-- Display the tags associated with the blog post -->
@@ -194,6 +210,47 @@
 		const initialLiked = '@Model.Liked';
 		const blogId = '@Model.Id';
 		const userId = '@userManager.GetUserId(User)';
+
+		/**
+		* Toggles the bookmark status of a blog post.
+		* This method checks the current bookmark status of a blog post, identified by `blogPostId`,
+		* and sends a POST ajax request to either add or remove the bookmark based on the current status.
+		* It updates the bookmark icon accordingly, switching between filled and unfilled states.
+		*/
+		function toggleBookmark(blogPostId) {
+			console.log(blogPostId);
+			const icon = document.querySelector('.bi-bookmark, .bi-bookmark-fill');
+			const isBookmarked = icon.classList.contains('bi-bookmark-fill');
+			const url = isBookmarked ? '@Url.Action("RemoveBookmark", "BookmarkPost")' : '@Url.Action("AddBookmark", "BookmarkPost")';
+			const data = { blogPostId: blogPostId };
+			console.log(url);
+			const formData = new FormData();
+			formData.append('blogPostId', blogPostId);
+
+			fetch(url, {
+				method: 'POST',
+				body: formData,
+				headers: {
+					'X-Requested-With': 'XMLHttpRequest'
+				}
+			})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						// Toggle the icon based on whether it was previously bookmarked
+						if (isBookmarked) {
+							icon.classList.remove('bi-bookmark-fill');
+							icon.classList.add('bi-bookmark');
+						} else {
+							icon.classList.remove('bi-bookmark');
+							icon.classList.add('bi-bookmark-fill');
+						}
+					} else {
+						console.error('Failed to update bookmark status.');
+					}
+				})
+				.catch(error => console.error('Error:', error));
+		}
 	</script>
 	<script src="~/js/likeFeature.js"></script>
 

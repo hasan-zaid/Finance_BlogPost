@@ -201,7 +201,10 @@ namespace Finance_BlogPost.Controllers
                 var result = await userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
-                    result = await userManager.AddLoginAsync(user, info);
+					// Assign "User" role to the newly created user
+					await userManager.AddToRoleAsync(user, "User");
+
+					result = await userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
                         await signInManager.SignInAsync(user, isPersistent: false);

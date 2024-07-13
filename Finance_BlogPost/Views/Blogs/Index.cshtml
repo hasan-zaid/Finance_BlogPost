@@ -68,7 +68,7 @@
 				<div class="mb-3 d-flex">
 					@foreach (var tag in Model.Tags)
 					{
-						<span class="badge bg-secondary me-1">@tag.Name</span>
+						<span class="badge dark-badge me-1">@tag.Name</span>
 					}
 				</div>
 
@@ -94,10 +94,10 @@
 							<form method="post">
 								<div class="mb-3">
 									<label class="form-label">Submit one today!</label>
-									<input type="text" class="form-control" maxlength="255" asp-for="CommentDescription" />
+									<input type="text" class="form-control" maxlength="255" asp-for="CommentDescription" required  />
 								</div>
 								<div class="mb-3">
-									<button type="submit" class="btn btn-dark">Submit</button>
+									<button type="submit" class="btn light-btn">Submit</button>
 									<!-- The hidden input fields below are used to send the corresponding signed in user id and url handle for the specific blog page accessed to the BlogsController -->
 									<input type="hidden" asp-for="Id" />
 									<input type="hidden" asp-for="UrlHandle" />
@@ -147,8 +147,8 @@
 									{
 										<form method="post">
 											<div class="p-3 d-flex flex-row justify-content-between align-items-center">
-												<div class="flex-row d-flex"><div>Reply:&nbsp;&nbsp;</div><div><input type="text" maxlength="255" class="form-control" asp-for="CommentDescription" /></div></div>
-												<button type="submit" class="btn btn-dark">Submit</button>
+												<div class="flex-row d-flex"><div>Reply:&nbsp;&nbsp;</div><div><input type="text" maxlength="255" class="form-control" asp-for="CommentDescription" required /></div></div>
+												<button type="submit" class="btn light-btn">Submit</button>
 												<!-- The hidden input fields below are used to send the corresponding signed in user id and url handle for the specific blog page accessed to the BlogsController -->
 												<input type="hidden" asp-for="Id" />
 												<input type="hidden" asp-for="ParentCommentId" value="@comment.CommentId" />

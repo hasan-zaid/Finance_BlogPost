@@ -28,7 +28,7 @@
 						<p>
 							@foreach (var tag in blogPost.Tags)
 							{
-								<span class="badge bg-secondary me-1">@tag.Name</span>
+								<span class="badge dark-badge me-1">@tag.Name</span>
 							}
 						</p>
 
@@ -36,7 +36,7 @@
 						<p class="mb-4">@blogPost.ShortDescription</p>
 
 						<!-- Link to read more of the blog post, dynamically generating the URL based on the blog post's UrlHandle -->
-						<a class="btn btn-dark"
+						<a class="btn light-btn"
 						   asp-area=""
 						   asp-controller="Blogs"
 						   asp-action="Index"

@@ -141,10 +141,11 @@ namespace Finance_BlogPost.Controllers
                 {
                     ModelState.AddModelError("Password", "Password must contain at least one non-alphanumeric character.");
                 }
-                if (registerViewModel.Password.Distinct().Count() < registerViewModel.Password.Length - 1)
+                if (registerViewModel.Password.Distinct().Count() < 2)
                 {
-                    ModelState.AddModelError("Password", "Password must contain at least one non-alphanumeric character.");
+                    ModelState.AddModelError("Password", "Password must contain at least two different characters.");
                 }
+
             }
         }
 

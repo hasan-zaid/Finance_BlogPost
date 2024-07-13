@@ -25,26 +25,54 @@
 	</div>
 </div>
 
+<!-- Container for displaying search bar to filter blog posts -->
+<form method="get" asp-controller="Home" asp-action="Index">
+	<div class="container mb-5">
+		<div class="row justify-content-center">
+			<div class="col-6 d-flex">
+				<!-- Input field for search query -->
+				<input type="text" class="form-control" placeholder="Search..." name="searchQuery" value="@ViewBag.SearchQuery" required />
+				<!-- Hidden input to retain the selected tag when submitting the form -->
+				@if (!string.IsNullOrEmpty(ViewBag.Tag))
+				{
+					<input type="hidden" name="tag" value="@ViewBag.Tag" />
+				}
+				<!-- Button to submit the search form -->
+				<button type="submit" class="btn btn-dark ms-3">Search</button>
+				<!-- Conditional display of "Show All" button if there is a search query -->
+				@if (Context.Request.Method == "GET" && !string.IsNullOrEmpty(Context.Request.Query["searchQuery"]))
+				{
+					<a class="btn btn-secondary ms-3" href="@Url.Action("Index", "Home")">Show All</a>
+				}
+			</div>
+		</div>
+	</div>
+</form>
+
 <!-- Container for displaying blog tags -->
-<div class="container">
+<div class="container mb-5">
 	<div class="row justify-content-center">
 		<div class="col-6 d-flex">
 			@if (Model != null && Model.Tags.Any())
 			{
 				foreach (var tag in Model.Tags)
 				{
-					<span class="badge bg-dark me-1">
+					// Determine if the current tag is active (selected) based on the query parameter
+					var isActive = Context.Request.Query["tag"] == tag.Name;
+					// Set the badge class based on whether the tag is active or not
+					var badgeClass = isActive ? "badge bg-dark me-1 text-white" : "badge bg-light border me-1 text-dark border";
+					// Create a clickable tag link that filters blog posts based on the tag
+					<a href="@Url.Action("Index", "Home", new { searchQuery = Context.Request.Query["searchQuery"], tag = tag.Name })" class="@badgeClass">
 						@tag.Name
-					</span>
+					</a>
 				}
 			}
 		</div>
 	</div>
-
 </div>
 
 <!-- Container for displaying blog posts -->
-<div class="container">
+<div class="container mb-5">
 	<div class="row justify-content-center">
 		<div class="col-6">
 			@if (Model != null && Model.BlogPosts.Any())
@@ -88,6 +116,13 @@
 						</a>
 					</div>
 				}
+			}
+			<!-- If no blog posts are found, display a message -->
+			@if (Model.BlogPosts == null || !Model.BlogPosts.Any())
+			{
+				<div class="alert alert-warning">
+					No blogs match your search.
+				</div>
 			}
 		</div>
 	</div>

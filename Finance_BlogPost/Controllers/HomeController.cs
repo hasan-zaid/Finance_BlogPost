@@ -27,28 +27,43 @@ namespace Finance_BlogPost.Controllers
       this.tagRepository = tagRepository;
     }
 
-    // Action method for the Index page
-    public async Task<IActionResult> Index()
-    {
-      // Retrieve all blog posts asynchronously
-      var blogPosts = await blogPostRepository.GetAllAsync();
+		// Action method for the Index page
+		// It retrieves all/filtered blog posts and tags and adds them to the view model
+		public async Task<IActionResult> Index(string? searchQuery, string? tag)
+		{
+			// Store the search query and tag in ViewBag for use in the view
+			ViewBag.SearchQuery = searchQuery;
+			ViewBag.Tag = tag;
 
-      // Retrieve all tags asynchronously
-      var tags = await tagRepository.GetAllAsync();
+			// Retrieve all blog posts and tags asynchronously
+			var blogPosts = await blogPostRepository.GetAllAsync();
+			var tags = await tagRepository.GetAllAsync();
 
-      // Add the blog posts and tags to the view model
-      var model = new HomeViewModel
-      {
-        BlogPosts = blogPosts,
-        Tags = tags
-      };
+			// Filter the blog posts based on the search query
+			if (!string.IsNullOrEmpty(searchQuery))
+			{
+				blogPosts = blogPosts.Where(bp => bp.Heading.Contains(searchQuery, StringComparison.OrdinalIgnoreCase) || bp.PageTitle.Contains(searchQuery, StringComparison.OrdinalIgnoreCase));
+			}
 
-      // Pass the blog posts to the view
-      return View(model);
-    }
+			// Further filter the blog posts based on the selected tag
+			if (!string.IsNullOrEmpty(tag))
+			{
+				blogPosts = blogPosts.Where(bp => bp.Tags.Any(t => t.Name.Equals(tag, StringComparison.OrdinalIgnoreCase)));
+			}
 
-    // Action method for the Privacy page
-    public IActionResult Privacy()
+			// Create a new HomeViewModel with the filtered blog posts and tags
+			var model = new HomeViewModel
+			{
+				BlogPosts = blogPosts,
+				Tags = tags
+			};
+
+			// Pass the HomeViewModel to the view
+			return View(model);
+		}
+
+		// Action method for the Privacy page
+		public IActionResult Privacy()
     {
       return View();
     }

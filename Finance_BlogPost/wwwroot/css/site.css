@@ -1,17 +1,18 @@
 :root {
-    --body-bg-color: #F0F6FD;
-    --button-primary-bg: #2489D3;
-    --csr-accent-one: #FFFE86;
-    --csr-accent-two: #FCFCAE;
-    --white: #fff;
+  --body-bg-color: #F0F6FD;
+  --button-primary-bg: #2489D3;
+  --csr-accent-one: #FFFE86;
+  --csr-accent-two: #FCFCAE;
+  --white: #fff;
 }
 
 
 html {
   font-size: 14px;
 }
+
 ::selection {
-    background-color: #FFFE86;
+  background-color: #FFFE86;
 }
 
 
@@ -31,16 +32,16 @@ html {
 }
 
 body {
-    margin-bottom: 60px;
-    background: #E2F8E7;
+  margin-bottom: 60px;
+  background: #E2F8E7;
 }
 
 /*Login Page Styling*/
 .landing-page-heading {
-    color: #000;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 1.4;
+  color: #000;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 /* User Profile Styling */
@@ -156,37 +157,38 @@ canvas {
 
 
 .navbar-nav li a {
-    cursor: pointer;
+  cursor: pointer;
 }
-nav{
-    background-color: #fff !important;
+
+nav {
+  background-color: #fff !important;
 }
 
 /*Profile icon styling */
 .avatar-circle {
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    background-color: #006466;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-    font-weight: bold;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: #006466;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: bold;
 }
 
 .avatar-circle-small {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    background-color: #006466;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-    font-weight: bold;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #006466;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: bold;
 }
 
 
@@ -195,37 +197,37 @@ nav{
 
 
 .light-btn, .dark-btn {
-    border-radius: 3.125rem;
-    border: 0.125rem solid #006466;
-    background-color: #fff;
-    color: #006466;
-    font-weight: 700;
-    line-height: 1.4;
-    word-wrap: break-word;
-    transition: all 0.3s ease;
+  border-radius: 3.125rem;
+  border: 0.125rem solid #006466;
+  background-color: #fff;
+  color: #006466;
+  font-weight: 700;
+  line-height: 1.4;
+  word-wrap: break-word;
+  transition: all 0.3s ease;
 }
 
 .dark-btn {
-    background-color: #006466;
-    color: #fff;
+  background-color: #006466;
+  color: #fff;
 }
 
 .light-btn:hover {
-    background-color: #006466;
-    color: #fff;
+  background-color: #006466;
+  color: #fff;
 }
 
 .dark-btn:hover {
-    background-color: #fff;
-    color: #006466;
-    border: 0.125rem solid #006466;
+  background-color: #fff;
+  color: #006466;
+  border: 0.125rem solid #006466;
 }
 
 @media (max-width: 767px) {
-    .light-btn, .dark-btn{
-        padding: 0.5rem 1rem; /* Adjust padding for smaller screens */
-        font-size: 0.875rem; /* Adjust font size for smaller screens */
-    }
+  .light-btn, .dark-btn {
+    padding: 0.5rem 1rem; /* Adjust padding for smaller screens */
+    font-size: 0.875rem; /* Adjust font size for smaller screens */
+  }
 }
 
 
@@ -235,140 +237,247 @@ nav{
 
 
 .sidebar-container {
-    display: flex;
-    justify-content: right;
-    height: 100vh;
-    width: auto;
-    gap: 1.25rem; /* 20px */
+  display: flex;
+  justify-content: right;
+  height: 100vh;
+  width: auto;
+  gap: 1.25rem; /* 20px */
 }
 
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 4.875rem; /* 78px */
-    height: 100vh;
-    background-color: var(--white);
-    padding-bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    transition: all 0.2s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 4.875rem; /* 78px */
+  height: 100vh;
+  background-color: var(--white);
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s;
 }
 
 .user-main {
-    width: calc(100% - 4.875rem); /* 78px */
-    padding: 1.25rem; /* 20px */
-    transition: all 0.2s;
+  width: calc(100% - 4.875rem); /* 78px */
+  padding: 1.25rem; /* 20px */
+  transition: all 0.2s;
 }
 
 .icon {
-    width: 3.125rem; /* 50px */
-    height: 3.125rem; /* 50px */
-    background-color: var(--csr-accent-one);
-    border-radius: 0.75rem; /* 12px */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    font-size: 1rem;
-    padding: 0.938rem; /* 15px */
-    gap: 0.938rem; /* 15px */
-    transition: all 0.2s;
+  width: 3.125rem; /* 50px */
+  height: 3.125rem; /* 50px */
+  background-color: var(--csr-accent-one);
+  border-radius: 0.75rem; /* 12px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  font-size: 1rem;
+  padding: 0.938rem; /* 15px */
+  gap: 0.938rem; /* 15px */
+  transition: all 0.2s;
 }
 
 .menu-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 0.625rem; /* 10px */
-    transition: all 0.2s;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.625rem; /* 10px */
+  transition: all 0.2s;
 }
 
 .menu-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    padding-top: 0.938rem;
-    gap: 0.625rem;
-    transition: all 0.2s;
-    padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  padding-top: 0.938rem;
+  gap: 0.625rem;
+  transition: all 0.2s;
+  padding-left: 0;
 }
 
 .icon-logout {
-    width: 100%;
-    height: 3.75rem;
-    background-color: var(--csr-accent-two);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
+  width: 100%;
+  height: 3.75rem;
+  background-color: var(--csr-accent-two);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
 }
 
-    .icon-logout:hover {
-        background-color: var(--csr-accent-two);
-        cursor: pointer;
-    }
+  .icon-logout:hover {
+    background-color: var(--csr-accent-two);
+    cursor: pointer;
+  }
 
 .logout-container {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    background-color: var(--csr-accent-two);
-    align-items: center;
-    font-size: 0.9rem;
-    gap: 0.625rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--csr-accent-two);
+  align-items: center;
+  font-size: 0.9rem;
+  gap: 0.625rem;
 }
 
-    .logout-container #logout-photo {
-        width: 2.8125rem;
-        height: 2.8125rem;
-        border-radius: 0.625rem;
-    }
+  .logout-container #logout-photo {
+    width: 2.8125rem;
+    height: 2.8125rem;
+    border-radius: 0.625rem;
+  }
 
 #user-container {
-    display: flex;
-    flex-direction: column;
-    gap: -0.3125rem;
+  display: flex;
+  flex-direction: column;
+  gap: -0.3125rem;
 }
 
 #user-name {
-    font-size: 0.9rem;
-    font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 #user-role {
-    font-size: 0.7rem;
-    font-weight: 400;
+  font-size: 0.7rem;
+  font-weight: 400;
 }
 
 
 
 .dashboard-content-container {
-    border-radius: 1.563rem;
-    background: var(--white);
+  border-radius: 1.563rem;
+  background: var(--white);
 }
 
-    .dashboard-content .h3, .dashboard-content-container .content-header, .dashboard-content-container .content-description {
-        font-size: 1.375rem;
-        font-weight: 600;
-        word-wrap: break-word;
-    }
+  .dashboard-content .h3, .dashboard-content-container .content-header, .dashboard-content-container .content-description {
+    font-size: 1.375rem;
+    font-weight: 600;
+    word-wrap: break-word;
+  }
 
 .notification-header, .notification-description {
-    font-size: 1rem;
-    word-wrap: break-word;
+  font-size: 1rem;
+  word-wrap: break-word;
 }
-
-
 
 /* News page styling */
 
-
 .news-card-text {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* Limit text to 3 lines */
-    -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit text to 3 lines */
+  -webkit-box-orient: vertical;
+}
+
+/* Custom CSS for Hero Section */
+
+.hero-section {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 30vh;
+  position: relative;
+  color: white;
+  border-radius: 15px; /* Apply rounded corners */
+  overflow: hidden; /* Ensure content does not overflow the rounded corners */
+}
+
+  .hero-section .container {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-section:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Overlay to darken the image */
+    z-index: 1;
+  }
+
+@media (max-width: 768px) {
+  .hero-section {
+    height: 20vh;
+  }
+}
+
+/* Custom CSS for Search and Tags in Home Page*/
+
+@media (max-width: 992px) {
+  .sticky-top {
+    position: static !important;
+  }
+}
+
+.card {
+  border-radius: 10px;
+}
+
+.badge {
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.form-control {
+  border-radius: 20px;
+}
+
+.refresh-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  transition: background-color 0.3s, transform 0.3s;
+  background-color: #fff;
+  color: #006466;
+  border: 2px solid #006466;
+}
+
+  .refresh-icon:hover {
+    background-color: #006466;
+    transform: rotate(90deg);
+    color: #fff;
+  }
+
+  /* Badge styling */
+
+.light-badge, .dark-badge {
+  border-radius: 3.125rem;
+  border: 0.125rem solid #006466;
+  background-color: #fff;
+  color: #006466;
+  font-weight: 700;
+  line-height: 1.4;
+  word-wrap: break-word;
+  transition: all 0.3s ease;
+}
+
+.dark-badge {
+  background-color: #006466;
+  color: #fff;
+}
+
+.light-badge {
+  background-color: #fff;
+  color: #006466;
+}
+
+.dark-badge:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+@media (max-width: 767px) {
+  .light-badge, .dark-badge {
+    padding: 0.5rem 1rem; /* Adjust padding for smaller screens */
+    font-size: 0.875rem; /* Adjust font size for smaller screens */
+  }
 }

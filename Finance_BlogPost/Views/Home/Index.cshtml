@@ -4,126 +4,112 @@
 	ViewData["Title"] = "Home Page";
 }
 
-<!-- Main container for the home page content -->
-<div class="container col-xxl-8 px-4 py-5">
-	<div class="row align-items-center g-5 py-5">
-		<div class="col-12 col-lg-6">
-			<h1 class="display-5 fw-bold lh-1 mb-3">
-				Finance_BlogPost - Your Daily Dose of Finance
-			</h1>
-			<p class="lead">
-				Finance_BlogPost is your one-stop shop for insightful and engaging content on all things finance. Dive deep into topics like investment, forex, personal finance, real estate, and the ever-evolving world of cryptocurrency.
-			</p>
-		</div>
-
-		<div class="col-12 col-lg-6">
-			<!-- Image for the blog -->
-			<img src="https://www.blueprintforbusiness.org/wp-content/uploads/2018/05/apple-brainstorming-business-908288.jpg"
-					 alt="Finance_BlogPost Image"
-					 class="d-block mx-lg-auto img-fluid" width="300" />
-		</div>
+<!-- Hero Section -->
+<div class="hero-section d-flex align-items-center justify-content-center text-center text-white" style="background-image: url('https://thumbs.dreamstime.com/b/business-concept-money-finance-economy-wallpaper-background-design-rich-illustration-image-ai-processing-involves-analyzing-324633229.jpg');">
+	<div class="container rounded-hero bg-dark-opacity">
+		<h1 class="display-4 fw-bold">Welcome to FinInsight</h1>
+		<p class="lead">
+			Your one-stop blog website for insightful content on all things finance!
+		</p>
 	</div>
 </div>
 
-<!-- Container for displaying search bar to filter blog posts -->
-<form method="get" asp-controller="Home" asp-action="Index">
-	<div class="container mb-5">
-		<div class="row justify-content-center">
-			<div class="col-6 d-flex">
-				<!-- Input field for search query -->
-				<input type="text" class="form-control" placeholder="Search..." name="searchQuery" value="@ViewBag.SearchQuery" required />
-				<!-- Hidden input to retain the selected tag when submitting the form -->
-				@if (!string.IsNullOrEmpty(ViewBag.Tag))
+<div class="container mt-5">
+	<div class="row">
+		<!-- Main Content -->
+		<div class="col-lg-8 order-2 order-lg-1">
+			<!-- Blog Posts Section -->
+			<div class="row">
+				@if (Model != null && Model.BlogPosts.Any())
 				{
-					<input type="hidden" name="tag" value="@ViewBag.Tag" />
+					foreach (var blogPost in Model.BlogPosts)
+					{
+						<div class="col-lg-6 col-md-12 mb-4">
+							<div class="card h-100">
+								<img src="@blogPost.BlogImageUrl" class="card-img-top" alt="@blogPost.Heading">
+								<div class="card-body d-flex flex-column">
+									<p class="card-text text-muted">@blogPost.PublishedDate.ToShortDateString()</p>
+									<p>
+										@foreach (var tag in blogPost.Tags)
+										{
+											<span class="badge dark-badge">@tag.Name</span>
+										}
+									</p>
+									<h5 class="card-title">@blogPost.Heading</h5>
+									<p class="card-text text-muted">Author: @blogPost.Author.UserName <p>
+									<p class="card-text">@blogPost.ShortDescription</p>
+									<div class="mt-auto">
+
+										<a href="@Url.Action("Index", "Blogs", new { urlHandle = blogPost.UrlHandle })" class="btn light-btn mt-3">Read More</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					}
 				}
-				<!-- Button to submit the search form -->
-				<button type="submit" class="btn btn-dark ms-3">Search</button>
-				<!-- Conditional display of "Show All" button if there is a search query -->
-				@if (Context.Request.Method == "GET" && !string.IsNullOrEmpty(Context.Request.Query["searchQuery"]))
+				else
 				{
-					<a class="btn btn-secondary ms-3" href="@Url.Action("Index", "Home")">Show All</a>
+					<div class="col-12">
+						<div class="alert alert-success text-center">
+							No blogs match your search.
+						</div>
+					</div>
 				}
 			</div>
 		</div>
-	</div>
-</form>
 
-<!-- Container for displaying blog tags -->
-<div class="container mb-5">
-	<div class="row justify-content-center">
-		<div class="col-6 d-flex">
-			@if (Model != null && Model.Tags.Any())
-			{
-				foreach (var tag in Model.Tags)
-				{
-					// Determine if the current tag is active (selected) based on the query parameter
-					var isActive = Context.Request.Query["tag"] == tag.Name;
-					// Set the badge class based on whether the tag is active or not
-					var badgeClass = isActive ? "badge bg-dark me-1 text-white" : "badge bg-light border me-1 text-dark border";
-					// Create a clickable tag link that filters blog posts based on the tag
-					<a href="@Url.Action("Index", "Home", new { searchQuery = Context.Request.Query["searchQuery"], tag = tag.Name })" class="@badgeClass">
-						@tag.Name
-					</a>
-				}
-			}
-		</div>
-	</div>
-</div>
-
-<!-- Container for displaying blog posts -->
-<div class="container mb-5">
-	<div class="row justify-content-center">
-		<div class="col-6">
-			@if (Model != null && Model.BlogPosts.Any())
-			{
-				<!-- Loop through each blog post in the model -->
-				foreach (var blogPost in Model.BlogPosts)
-				{
-					<div class="mb-5 bg-light box-shadow p-5">
-						<!-- Display the blog post's featured image -->
-						<img src="@blogPost.BlogImageUrl" alt="@blogPost.Heading"
-								 class="mb-2 d-block img-fluid" />
-
-						<!-- Display the blog post's heading -->
-						<h2 class="mb-4">@blogPost.Heading</h2>
-
-						<!-- Display the blog post's author and published date -->
-						<p class="mb-4">
-							Author: @blogPost.Author.UserName
-							<br />
-							Published Date: @blogPost.PublishedDate.ToShortDateString()
-						</p>
-
-						<!-- Display the blog post's tags -->
-						<p>
-							@foreach (var tag in blogPost.Tags)
-							{
-								<span class="badge bg-secondary me-1">@tag.Name</span>
-							}
-						</p>
-
-						<!-- Display the blog post's short description -->
-						<p class="mb-4">@blogPost.ShortDescription</p>
-
-						<!-- Link to read more of the blog post, dynamically generating the URL based on the blog post's UrlHandle -->
-						<a class="btn btn-dark"
-							 asp-area=""
-							 asp-controller="Blogs"
-							 asp-action="Index"
-							 asp-route-urlHandle="@blogPost.UrlHandle">
-							Read More
-						</a>
+		<!-- Sidebar -->
+		<div class="col-lg-4 order-1 order-lg-2 mb-4 mb-lg-0">
+			<div class="sticky-top">
+				<!-- Search Section -->
+				<div class="card shadow-sm p-3 mb-4">
+					<div class="d-flex align-items-center mb-3">
+						<h2 class="h4 ">Search Blogs</h2>
+						@if (Context.Request.Method == "GET" && (!string.IsNullOrEmpty(Context.Request.Query["searchQuery"]) || !string.IsNullOrEmpty(Context.Request.Query["tag"])))
+						{
+							<a class="ms-2 refresh-icon" href="@Url.Action("Index", "Home")" data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh to Show All">
+								<i class="bi bi-arrow-clockwise"></i>
+							</a>
+						}
 					</div>
-				}
-			}
-			<!-- If no blog posts are found, display a message -->
-			@if (Model.BlogPosts == null || !Model.BlogPosts.Any())
-			{
-				<div class="alert alert-warning">
-					No blogs match your search.
+					<form method="get" asp-controller="Home" asp-action="Index" class="d-flex">
+						<input type="text" class="form-control me-2" placeholder="Enter here..." name="searchQuery" value="@ViewBag.SearchQuery" required>
+						@if (!string.IsNullOrEmpty(ViewBag.Tag))
+						{
+							<input type="hidden" name="tag" value="@ViewBag.Tag" />
+						}
+						<button type="submit" class="btn light-btn">Search</button>
+					</form>
 				</div>
-			}
+
+				<!-- Tags Section -->
+				<div class="card shadow-sm p-3">
+					<h2 class="h4 mb-3">Browse by Tags</h2>
+					<div class="d-flex flex-wrap">
+						@if (Model != null && Model.Tags.Any())
+						{
+							foreach (var tag in Model.Tags)
+							{
+								var isActive = Context.Request.Query["tag"] == tag.Name;
+								var badgeClass = isActive ? "badge dark-badge me-2 mb-2 text-decoration-none" : "badge light-btn me-2 mb-2 text-decoration-none";
+								<a href="@Url.Action("Index", "Home", new { searchQuery = Context.Request.Query["searchQuery"], tag = tag.Name })" class="@badgeClass">
+									@tag.Name
+								</a>
+							}
+						}
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
+
+<!-- Add the following script for the tooltip to work -->
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+			return new bootstrap.Tooltip(tooltipTriggerEl)
+		})
+	});
+</script>

@@ -1,0 +1,20 @@
+
+{
+    "region" : "us-east-1",
+    "configuration" : "Debug",
+    "framework"     : "net8.0",
+    "self-contained" : true,
+    "application"    : "FinanceBlogPost",
+    "environment"    : "FinanceBlogPost-dev",
+    "enable-xray"    : true,
+    "enhanced-health-type" : "enhanced",
+    "additional-options"   : "\"aws:autoscaling:launchconfiguration,SecurityGroups\"=\"sg-00c4ed0171952d1e1,sg-0e6c3368cd086d421\";\"aws:ec2:vpc,Subnets\"=\"subnet-0a8ab731ea8bcdd4d\"",
+    "solution-stack"       : "64bit Amazon Linux 2 v2.7.3 running .NET Core",
+    "environment-type"     : "SingleInstance",
+    "cname"                : "financeblogpost-dev",
+    "instance-type"        : "t2.micro",
+    "key-pair"             : "vockey",
+    "instance-profile"     : "LabInstanceProfile",
+    "service-role"         : "LabRole",
+    "proxy-server"         : "nginx"
+}

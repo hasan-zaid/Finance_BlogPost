@@ -13,7 +13,7 @@ namespace Finance_BlogPost.Repositories
 
         public MediaRepository()
         {
-            this.BucketName = "finace-blogpost-profile-pics";
+            this.BucketName = "fininsight-media";
 
         }
 

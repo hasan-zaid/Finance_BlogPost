@@ -25,8 +25,8 @@
 					foreach (var blogPost in Model.BlogPosts)
 					{
 						<div class="col-lg-6 col-md-12 mb-4">
-							<div class="card h-100">
-								<img src="@blogPost.BlogImageUrl" class="card-img-top" alt="@blogPost.Heading">
+							<div class="card h-80 fixed-card-height">
+								<img src="@blogPost.BlogImageUrl" class="fixed-img-height" alt="@blogPost.Heading">
 								<div class="card-body d-flex flex-column">
 									<p class="card-text text-muted">@blogPost.PublishedDate.ToShortDateString()</p>
 									<p>
@@ -37,7 +37,7 @@
 									</p>
 									<h5 class="card-title">@blogPost.Heading</h5>
 									<p class="card-text text-muted">Author: @blogPost.Author.UserName <p>
-									<p class="card-text">@blogPost.ShortDescription</p>
+									<p class="card-text short-description">@blogPost.ShortDescription</p>
 									<div class="mt-auto">
 
 										<a href="@Url.Action("Index", "Blogs", new { urlHandle = blogPost.UrlHandle })" class="btn light-btn mt-3">Read More</a>

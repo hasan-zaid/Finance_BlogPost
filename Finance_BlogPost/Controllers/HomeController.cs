@@ -3,6 +3,7 @@ using Finance_BlogPost.Models.ViewModels;
 using Finance_BlogPost.Models;
 using Finance_BlogPost.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Finance_BlogPost.Utility;
 
 namespace Finance_BlogPost.Controllers
 {
@@ -35,8 +36,8 @@ namespace Finance_BlogPost.Controllers
 			ViewBag.SearchQuery = searchQuery;
 			ViewBag.Tag = tag;
 
-			// Retrieve all blog posts and tags asynchronously
-			var blogPosts = await blogPostRepository.GetAllAsync();
+			// Retrieve all approved blog posts and tags asynchronously
+			var blogPosts = (await blogPostRepository.GetAllAsync()).Where(bp => bp.Approval == BlogPostApproval.Approved);
 			var tags = await tagRepository.GetAllAsync();
 
 			// Filter the blog posts based on the search query

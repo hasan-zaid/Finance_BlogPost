@@ -13,7 +13,13 @@ namespace Finance_BlogPost.Repositories
 							int pageNumber = 1,
 							int pageSize = 100);
 
-		Task<IEnumerable<BlogPost>> GetAllAuthorPostsAsync(string authorId,
+        Task<IEnumerable<BlogPost>> GetAllApprovedAsync(string? searchQuery,
+                                string? sortBy,
+                                string? sortDirection,
+                                int pageNumber = 1,
+                                int pageSize = 100);
+
+        Task<IEnumerable<BlogPost>> GetAllAuthorPostsAsync(string authorId,
 							string? searchQuery,
 							string? sortBy,
 							string? sortDirection,

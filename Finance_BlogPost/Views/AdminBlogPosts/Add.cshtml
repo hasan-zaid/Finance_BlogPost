@@ -87,11 +87,12 @@
     @await Html.PartialAsync("_ValidationScriptsPartial")
 
     <script>
-        // Initialize Froala Editor with image upload URL
-        var editor = new FroalaEditor('#content', {
-            imageUploadURL: '/api/media'
+        // Initialize Tiny Editor
+        tinymce.init({
+            selector: '#content',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
         });
-
         // Get elements by their IDs
         const blogUploadElement = document.getElementById('blogImageUpload');
         const blogImageUrlElement = document.getElementById('blogImageUrl');

@@ -115,7 +115,7 @@ namespace Finance_BlogPost.Controllers
             ViewBag.PageSize = pageSize;
             ViewBag.PageNumber = pageNumber;
 
-            var blogs = await blogPostRepository.GetAllAsync(searchQuery, sortBy, sortDirection, pageNumber, pageSize);
+            var blogs = await blogPostRepository.GetAllApprovedAsync(searchQuery, sortBy, sortDirection, pageNumber, pageSize);
 
             return View(blogs);
         }

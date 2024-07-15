@@ -1,5 +1,6 @@
 ﻿using Finance_BlogPost.Data;
 using Finance_BlogPost.Models.Domain;
+using Finance_BlogPost.Utility;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
@@ -38,7 +39,7 @@ namespace Finance_BlogPost.Repositories
     // Returns all blog posts from the database
     public async Task<IEnumerable<BlogPost>> GetAllAsync()
     {
-      // Returns the list of blog posts from the database and includes the list of tags associated with each blog post
+      // Returns the list of blog posts from the database and includes the list of authors and tags associated with each blog post
       return await dbContext.BlogPosts.Include(x => x.Author).Include(x => x.Tags).ToListAsync();
     }
 
@@ -50,7 +51,7 @@ namespace Finance_BlogPost.Repositories
 		{
 			var query = dbContext.BlogPosts
 													 .Include(x => x.Author)
-													 .Include(x => x.Tags) // Include Tags
+													 .Include(x => x.Tags) 
 													 .AsQueryable();
 
 			// Filtering
@@ -81,7 +82,48 @@ namespace Finance_BlogPost.Repositories
 			return await query.ToListAsync();
 		}
 
-		public async Task<IEnumerable<BlogPost>> GetAllAuthorPostsAsync(string authorId, string? searchQuery,
+        public async Task<IEnumerable<BlogPost>> GetAllApprovedAsync(string? searchQuery,
+                        string? sortBy,
+                        string? sortDirection,
+                        int pageNumber = 1,
+                        int pageSize = 100)
+        {
+            var query = dbContext.BlogPosts
+                                 .Include(x => x.Author)
+                                 .Include(x => x.Tags)
+                                 .Where(x => x.Approval == BlogPostApproval.Approved) 
+                                 .AsQueryable();
+
+            // Filtering by search query
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                query = query.Where(x => x.Heading.Contains(searchQuery));
+            }
+
+            // Sorting
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                var isDesc = string.Equals(sortDirection, "Desc", StringComparison.OrdinalIgnoreCase);
+
+                if (string.Equals(sortBy, "Heading", StringComparison.OrdinalIgnoreCase))
+                {
+                    query = isDesc ? query.OrderByDescending(x => x.Heading) : query.OrderBy(x => x.Heading);
+                }
+                else if (string.Equals(sortBy, "PublishedDate", StringComparison.OrdinalIgnoreCase))
+                {
+                    query = isDesc ? query.OrderByDescending(x => x.PublishedDate) : query.OrderBy(x => x.PublishedDate);
+                }
+            }
+
+            // Pagination
+            var skipResults = (pageNumber - 1) * pageSize;
+            query = query.Skip(skipResults).Take(pageSize);
+
+            return await query.ToListAsync();
+        }
+
+
+        public async Task<IEnumerable<BlogPost>> GetAllAuthorPostsAsync(string authorId, string? searchQuery,
 							string? sortBy,
 							string? sortDirection,
 							string? status,

@@ -25,8 +25,8 @@
 					foreach (var blogPost in Model.BlogPosts)
 					{
 						<div class="col-lg-6 col-md-12 mb-4">
-							<div class="card h-100">
-								<img src="@blogPost.BlogImageUrl" class="card-img-top" alt="@blogPost.Heading">
+							<div class="card h-80 fixed-card-height">
+								<img src="@blogPost.BlogImageUrl" class="fixed-img-height" alt="@blogPost.Heading">
 								<div class="card-body d-flex flex-column">
 									<p class="card-text text-muted">@blogPost.PublishedDate.ToShortDateString()</p>
 									<p>
@@ -37,7 +37,7 @@
 									</p>
 									<h5 class="card-title">@blogPost.Heading</h5>
 									<p class="card-text text-muted">Author: @blogPost.Author.UserName <p>
-									<p class="card-text">@blogPost.ShortDescription</p>
+									<p class="card-text short-description">@blogPost.ShortDescription</p>
 									<div class="mt-auto">
 
 										<a href="@Url.Action("Index", "Blogs", new { urlHandle = blogPost.UrlHandle })" class="btn light-btn mt-3">Read More</a>
@@ -64,16 +64,25 @@
 				<!-- Search Section -->
 				<div class="card shadow-sm p-3 mb-4">
 					<div class="d-flex align-items-center mb-3">
-						<h2 class="h4 ">Search Blogs</h2>
-						@if (Context.Request.Method == "GET" && (!string.IsNullOrEmpty(Context.Request.Query["searchQuery"]) || !string.IsNullOrEmpty(Context.Request.Query["tag"])))
+						<h2 class="h4">Search Blogs</h2>
+						@* Check if there is a search query and a tag selected; if so, display the refresh icon to clear search results while retaining the tag *@
+						@if (Context.Request.Method == "GET" && !string.IsNullOrEmpty(Context.Request.Query["searchQuery"]) && !string.IsNullOrEmpty(Context.Request.Query["tag"]))
 						{
-							<a class="ms-2 refresh-icon" href="@Url.Action("Index", "Home")" data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh to Show All">
+							<a class="ms-2 refresh-icon" href="@Url.Action("Index", "Home", new { tag = Context.Request.Query["tag"] })" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear Search Results">
+								<i class="bi bi-arrow-clockwise"></i>
+							</a>
+						}
+						@* Check if there is only a search query; if so, display the refresh icon to clear the search results *@
+						else if (Context.Request.Method == "GET" && !string.IsNullOrEmpty(Context.Request.Query["searchQuery"]))
+						{
+							<a class="ms-2 refresh-icon" href="@Url.Action("Index", "Home")" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear Search Results">
 								<i class="bi bi-arrow-clockwise"></i>
 							</a>
 						}
 					</div>
 					<form method="get" asp-controller="Home" asp-action="Index" class="d-flex">
 						<input type="text" class="form-control me-2" placeholder="Enter here..." name="searchQuery" value="@ViewBag.SearchQuery" required>
+						@* Preserve the tag if it is selected while performing a search *@
 						@if (!string.IsNullOrEmpty(ViewBag.Tag))
 						{
 							<input type="hidden" name="tag" value="@ViewBag.Tag" />
@@ -84,13 +93,25 @@
 
 				<!-- Tags Section -->
 				<div class="card shadow-sm p-3">
-					<h2 class="h4 mb-3">Browse by Tags</h2>
+					<div class="d-flex align-items-center mb-3">
+						<h2 class="h4">Browse by Tags</h2>
+						@* Check if a tag is selected; if so, display the refresh icon to clear all tags *@
+						@if (Context.Request.Method == "GET" && !string.IsNullOrEmpty(Context.Request.Query["tag"]))
+						{
+							<a class="ms-2 refresh-icon" href="@Url.Action("Index", "Home", new { searchQuery = Context.Request.Query["searchQuery"] })" data-bs-toggle="tooltip" data-bs-placement="top" title="Clear All Tags">
+								<i class="bi bi-arrow-clockwise"></i>
+							</a>
+						}
+					</div>
 					<div class="d-flex flex-wrap">
+						@* Display the list of tags *@
 						@if (Model != null && Model.Tags.Any())
 						{
 							foreach (var tag in Model.Tags)
 							{
+								@* Check if the current tag is active (selected) *@
 								var isActive = Context.Request.Query["tag"] == tag.Name;
+								@* Set the badge class based on whether the tag is active or not *@
 								var badgeClass = isActive ? "badge dark-badge me-2 mb-2 text-decoration-none" : "badge light-btn me-2 mb-2 text-decoration-none";
 								<a href="@Url.Action("Index", "Home", new { searchQuery = Context.Request.Query["searchQuery"], tag = tag.Name })" class="@badgeClass">
 									@tag.Name
@@ -101,6 +122,7 @@
 				</div>
 			</div>
 		</div>
+
 	</div>
 </div>
 

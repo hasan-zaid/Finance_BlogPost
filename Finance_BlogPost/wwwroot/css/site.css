@@ -481,3 +481,27 @@ nav {
     font-size: 0.875rem; /* Adjust font size for smaller screens */
   }
 }
+
+/* Fixed Image Height for Home Page Blog Cards */
+
+.fixed-card-height {
+  height: 800px; /* Adjust the height as needed */
+}
+
+.fixed-img-height {
+  height: 300px; /* Adjust the height as needed */
+  object-fit: cover;
+}
+
+.short-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 6; /* Limit the number of lines */
+  -webkit-box-orient: vertical;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+}

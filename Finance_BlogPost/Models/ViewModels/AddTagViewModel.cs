@@ -2,7 +2,7 @@
 
 namespace Finance_BlogPost.Models.ViewModels
 {
-    public class AddTagRequest
+    public class AddTagViewModel
     {
         [Required]
         public string Name { get; set; }

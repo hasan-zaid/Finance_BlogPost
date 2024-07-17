@@ -96,13 +96,13 @@ namespace Finance_BlogPost.Controllers
 				blogCommentsDomainModel = blogCommentsDomainModel.OrderByDescending(comment => comment.PublishedDate);
 
 				// Initialize a new list to hold the transformed blog comments for the view
-				var blogCommentsForView = new List<Models.ViewModels.BlogComment>();
+				var blogCommentsForView = new List<Models.ViewModels.BlogCommentViewModel>();
 
 				// Iterate through each blog comment from the domain model and transform it for the view
 				foreach (var blogComment in blogCommentsDomainModel)
 				{
 					// Create a new BlogComment object for the view with designated properties
-					var blogCommentForView = new Models.ViewModels.BlogComment
+					var blogCommentForView = new Models.ViewModels.BlogCommentViewModel
 					{
 						CommentId = blogComment.Id, // Set the comment ID
 						Description = blogComment.Description, // Set the description of the blog comment
@@ -191,7 +191,7 @@ namespace Finance_BlogPost.Controllers
 
 		// Action method to handle POST requests to delete a comment
 		[HttpPost]
-		public async Task<IActionResult> DeleteComment([FromBody] DeleteComment model)
+		public async Task<IActionResult> DeleteComment([FromBody] DeleteCommentViewModel model)
 		{
 			// Delete the comment and its replies from the database via the repository
 			var deletedComment = await blogPostCommentRepository.DeleteCommentWithRepliesAsync(model.Id);

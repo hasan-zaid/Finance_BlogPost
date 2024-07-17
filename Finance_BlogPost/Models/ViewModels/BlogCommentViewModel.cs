@@ -1,6 +1,6 @@
 ﻿namespace Finance_BlogPost.Models.ViewModels
 {
-	public class BlogComment
+	public class BlogCommentViewModel
 	{
 		public Guid CommentId { get; set; }
 		public string Description { get; set; }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Finance_BlogPost.Models.ViewModels
 {
-    public class AddBlogPostRequest
+    public class AddBlogPostViewModel
     {
         public string Heading { get; set; }
         public string PageTitle { get; set; }

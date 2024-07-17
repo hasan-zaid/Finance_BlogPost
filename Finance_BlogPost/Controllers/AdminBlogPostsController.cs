@@ -29,7 +29,7 @@ namespace Finance_BlogPost.Controllers
             // get tags from repository
             var tags = await tagRepository.GetAllAsync();
 
-            var model = new AddBlogPostRequest
+            var model = new AddBlogPostViewModel
             {
                 Tags = tags.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() })
             };
@@ -38,7 +38,7 @@ namespace Finance_BlogPost.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddBlogPostRequest addBlogPostRequest)
+        public async Task<IActionResult> Add(AddBlogPostViewModel addBlogPostRequest)
         {
 
             //Get the current signed in user
@@ -132,7 +132,7 @@ namespace Finance_BlogPost.Controllers
             if (blogPost != null)
             {
                 // map the domain model into the view model
-                var model = new EditBlogPostRequest
+                var model = new EditBlogPostViewModel
                 {
                     Id = blogPost.Id,
                     Heading = blogPost.Heading,
@@ -163,7 +163,7 @@ namespace Finance_BlogPost.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(EditBlogPostRequest editBlogPostRequest)
+        public async Task<IActionResult> Edit(EditBlogPostViewModel editBlogPostRequest)
         {
             // map view model back to domain model
             var blogPostDomainModel = new BlogPost

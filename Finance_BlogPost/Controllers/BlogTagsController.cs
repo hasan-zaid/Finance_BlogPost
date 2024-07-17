@@ -26,7 +26,7 @@ namespace Finance_BlogPost.Controllers
 
         [HttpPost]
         [ActionName("Add")]
-        public async Task<IActionResult> Add(AddTagRequest addTagRequest)
+        public async Task<IActionResult> Add(AddTagViewModel addTagRequest)
         {
             //Custom Validation
 
@@ -99,7 +99,7 @@ namespace Finance_BlogPost.Controllers
 
             if (tag != null)
             {
-                var editTagRequest = new EditTagRequest
+                var editTagRequest = new EditTagViewModel
                 {
                     Id = tag.Id,
                     Name = tag.Name,
@@ -113,7 +113,7 @@ namespace Finance_BlogPost.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(EditTagRequest editTagRequest)
+        public async Task<IActionResult> Edit(EditTagViewModel editTagRequest)
         {
             //Custom Validation
             if (editTagRequest.Name is not null && editTagRequest.DisplayName is not null)

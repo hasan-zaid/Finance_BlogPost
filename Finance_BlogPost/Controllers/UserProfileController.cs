@@ -29,7 +29,7 @@ namespace Finance_BlogPost.Controllers
             {
                 var userProfileImage = await userProfileImageRepository.GetByUserAsync(user.Id);
 
-                var userProfile = new UserViewProfile
+                var userProfile = new UserProfileViewModel
                 {
                     Username = user.UserName,
                     Email = user.Email,
@@ -43,7 +43,7 @@ namespace Finance_BlogPost.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Details(UserViewProfile userProfile)
+        public async Task<IActionResult> Details(UserProfileViewModel userProfile)
         {
             if (ModelState.IsValid)
             {

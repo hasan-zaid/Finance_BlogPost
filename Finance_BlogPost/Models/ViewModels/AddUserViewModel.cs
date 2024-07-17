@@ -1,6 +1,6 @@
 ﻿namespace Finance_BlogPost.Models.ViewModels
 {
-    public class AddUserRequest
+    public class AddUserViewModel
     {
     
         public string Username { get; set; }

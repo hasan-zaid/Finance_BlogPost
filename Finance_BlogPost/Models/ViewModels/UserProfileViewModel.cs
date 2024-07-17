@@ -2,7 +2,7 @@
 
 namespace Finance_BlogPost.Models.ViewModels
 {
-    public class UserViewProfile
+    public class UserProfileViewModel
     {
         public string Username { get; set; }
         public string Email { get; set; }

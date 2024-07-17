@@ -68,7 +68,7 @@ namespace Finance_BlogPost.Controllers
             if (blogPost != null)
             {
                 // map the domain model into the view model
-                var model = new BlogPostDetails
+                var model = new BlogPostDetailsViewModel
                 {
                     Id = blogPost.Id,
                     Heading = blogPost.Heading,
@@ -99,7 +99,7 @@ namespace Finance_BlogPost.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Approve(BlogPostDetails postDetails)
+        public async Task<IActionResult> Approve(BlogPostDetailsViewModel postDetails)
         {
             var blogPost = await blogPostRepository.GetAsync(postDetails.Id);
             if (blogPost != null)
@@ -131,7 +131,7 @@ namespace Finance_BlogPost.Controllers
 
         }
         [HttpPost]
-        public async Task<IActionResult> Reject(BlogPostDetails postDetails)
+        public async Task<IActionResult> Reject(BlogPostDetailsViewModel postDetails)
         {
             var blogPost = await blogPostRepository.GetAsync(postDetails.Id);
             if (blogPost != null)

@@ -97,7 +97,7 @@ namespace Finance_BlogPost.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(AddUserRequest addUserRequest)
+        public async Task<IActionResult> Add(AddUserViewModel addUserRequest)
         {
             //add custom password validation
             ValidatePassword(addUserRequest);
@@ -153,7 +153,7 @@ namespace Finance_BlogPost.Controllers
             return View();
         }
 
-        private void ValidatePassword(AddUserRequest addUserRequest)
+        private void ValidatePassword(AddUserViewModel addUserRequest)
         {
             if (addUserRequest.Password is not null)
             {

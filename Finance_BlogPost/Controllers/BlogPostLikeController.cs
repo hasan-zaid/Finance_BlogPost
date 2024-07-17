@@ -26,7 +26,7 @@ namespace Bloggie.Web.Controllers
 		// The AddLikeForBlog method of the IBlogPostLikeRepository is called to add a like to the blog post in the database.
 		[HttpPost]
 		[Route("Add")]
-		public async Task<IActionResult> AddLike([FromBody] AddLikeRequest addLikeRequest)
+		public async Task<IActionResult> AddLike([FromBody] AddLikeViewModel addLikeRequest)
 		{
 			// Create a new BlogPostLike object using the data from the request body.
 			var model = new BlogLike
@@ -59,7 +59,7 @@ namespace Bloggie.Web.Controllers
 		// The RemoveLikeForBlog method of the IBlogPostLikeRepository is called to remove a like from the blog post in the database.
 		[HttpPost]
 		[Route("Remove")]
-		public async Task<IActionResult> RemoveLike([FromBody] AddLikeRequest addLikeRequest)
+		public async Task<IActionResult> RemoveLike([FromBody] AddLikeViewModel addLikeRequest)
 		{
 			// Create a new BlogLike object using the data from the request body.
 			var model = new BlogLike

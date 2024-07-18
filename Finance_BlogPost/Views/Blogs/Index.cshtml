@@ -32,8 +32,8 @@
 				<!-- Display the number of likes for the blog post -->
 				<div class="mb-3 d-flex justify-content-between">
 					<div>
-						<!-- Check if the user is signed in -->
-						@if (signInManager.IsSignedIn(User))
+						<!-- Check if the user is signed in and in the "User" role -->
+						@if (signInManager.IsSignedIn(User) && User.IsInRole("User"))
 						{
 							<a id="btnLike" style="cursor: pointer;">
 								<!-- Check if the user has already liked the blog post -->

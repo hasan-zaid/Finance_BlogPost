@@ -13,14 +13,14 @@ namespace Finance_BlogPost.Repositories
 
         public MediaRepository()
         {
-            this.BucketName = "fininsight-media";
+            this.BucketName = "fininsight-media-bucket";
 
         }
 
         public async Task<string> UploadAsync(IFormFile file)
         {
 
-            var client = new AmazonS3Client(RegionEndpoint.USEast1);
+            var client = new AmazonS3Client("AKIAYS2NQA6BXDGBAPGR", "2tWw0oFUlYheUi3dVTJ76QVIP2ixg+gDuP+I+vYN", RegionEndpoint.APSoutheast1);
 
             // Check if the bucket exists
             var bucketExists = await AmazonS3Util.DoesS3BucketExistV2Async(client, BucketName);

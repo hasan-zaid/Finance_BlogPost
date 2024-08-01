@@ -1,4 +1,9 @@
-﻿using Amazon.Runtime.Internal;
+﻿using Amazon;
+using Amazon.Runtime;
+using Amazon.Runtime.Internal;
+using Amazon.S3;
+using Amazon.SimpleNotificationService;
+using Amazon.SimpleNotificationService.Model;
 using Finance_BlogPost.Models.Domain;
 using Finance_BlogPost.Models.ViewModels;
 using Finance_BlogPost.Repositories;
@@ -7,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Query;
+using System.Text.Json;
 
 namespace Finance_BlogPost.Controllers
 {
@@ -68,7 +74,7 @@ namespace Finance_BlogPost.Controllers
 			};
 
 			// Map Tags from selected tags
-			var selectedTags = new List<Tag>();
+			var selectedTags = new List<Finance_BlogPost.Models.Domain.Tag>();
 			foreach (var selectedTagId in addBlogPostRequest.SelectedTags)
 			{
 				var selectedTagIdAsGuid = Guid.Parse(selectedTagId);
@@ -99,8 +105,27 @@ namespace Finance_BlogPost.Controllers
             };
             notificationRepository.Add(notification);
 
+			//add to sns topic
+			// send a message to an already existing topic created in AWS SNS on aws console
+			var credentials = new BasicAWSCredentials("AKIAYS2NQA6BXDGBAPGR", "2tWw0oFUlYheUi3dVTJ76QVIP2ixg+gDuP+I+vYN");
+			var client = new AmazonSimpleNotificationServiceClient(credentials, RegionEndpoint.APSoutheast1);
 
-            return RedirectToAction("List");
+			var username = user.UserName;
+			var data = new
+			{
+				Message = $"User with the username '{username}' has added a new blog post"
+			};
+
+			var request = new PublishRequest()
+			{
+				TopicArn = "arn:aws:sns:ap-southeast-1:590183663491:fininsight-notification", 
+				Message = JsonSerializer.Serialize(data),
+				Subject = "NewBlogPostAdded"
+			};
+
+			var response = await client.PublishAsync(request);
+
+			return RedirectToAction("List");
 		}
 
 
@@ -216,7 +241,7 @@ namespace Finance_BlogPost.Controllers
 
 			// Map tags into domain model
 
-			var selectedTags = new List<Tag>();
+			var selectedTags = new List<Finance_BlogPost.Models.Domain.Tag>();
 			foreach (var selectedTag in editBlogPostRequest.SelectedTags)
 			{
 				if (Guid.TryParse(selectedTag, out var tag))

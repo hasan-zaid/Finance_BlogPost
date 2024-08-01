@@ -1,7 +1,10 @@
+
+using Amazon.XRay.Recorder.Handlers.AwsSdk;
 using Finance_BlogPost.Data;
 using Finance_BlogPost.Repositories;
 using Finance_BlogPost.Services;
 using Microsoft.AspNetCore.Authentication.OAuth;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
@@ -71,9 +74,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-
+AWSSDKHandler.RegisterXRayForAllServices();
 var app = builder.Build();
-
+app.UseXRay("FinInsight");
+    
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
